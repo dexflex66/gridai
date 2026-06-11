@@ -1,0 +1,25 @@
+{
+  "scenario_name": "gossip_heterogeneous",
+  "load_source": "aemo",
+  "strategy": "gossip",
+  "reviewed_by": "compliance",
+  "review_timestamp": "2026-06-11T10:03:06.399229+00:00",
+  "upstream_band_step": 6,
+  "forecaster_risk_level": "LOW",
+  "coordinator_rounds_to_converge": 1,
+  "coordinator_synchrony_ratio": 0.167,
+  "total_breach_events": 650,
+  "herding_overvolt_event_count": 0,
+  "herding_undervolt_event_count": 435,
+  "pv_export_event_count": 0,
+  "pv_export_flagged_as_protocol_failure": false,
+  "compliance_decision": "APPROVED",
+  "reason": "Zero battery-herding overvoltage breaches detected. Gossip coordination successfully eliminated herding spikes. Dispatch plan approved.",
+  "audit_chain": {
+    "forecaster_identified_risk_level": "LOW",
+    "coordinator_proposed_strategy": "gossip",
+    "coordinator_synchrony_ratio": 0.167,
+    "compliance_finding": "no_battery_herding_overvoltage",
+    "compliance_action": "approve"
+  }
+}

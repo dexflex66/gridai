@@ -13,7 +13,7 @@
 - `outputs/summary_aemo.json`: AEMO-driven scenarios
 - `tests/test_simulation.py`: 21 tests, all PASSING
 - `tests/test_aemo.py`: 15 tests covering AEMO load, row count, AEMO-driven herding story, breach cause separation — all PASSING
-- **Total: 36 tests, 36 passed, 0 failed, 1.19s**
+- **Total (Day 1+2): 36 tests, 36 passed, 0 failed, 1.19s**
 - Day 1 git commit: `1e2f549`
 - Day 2 git commit: (see below after commit)
 
@@ -21,12 +21,50 @@
 
 _Nothing in progress._
 
+## DONE (Day 3 — verified)
+
+- `agents/band_interface.py`: abstract BandInterface (register, discover, send, broadcast, handoff, subscribe, drain, audit_log)
+- `agents/mock_band.py`: MockBand — in-process synchronous implementation; append-only audit log with step/timestamp/sender/recipient/message_type/payload
+- `agents/forecaster.py`: ForecasterAgent — analyses naive scenario, identifies evening battery-herding risk window, hands off structured risk_window context to Coordinator
+- `agents/coordinator.py`: CoordinatorAgent — receives risk_window, runs gossip coordination (Layer 1), hands off current plan trajectory + proposed gossip plan to Compliance
+- `agents/compliance.py`: ComplianceAgent — reviews voltage trajectory for battery_herding OVERVOLTAGE breaches; ignores pv_export; escalates to Operator or approves; writes audit trail entries
+- `agents/grid_operator.py`: OperatorAgent — receives escalations/approvals, records governance decision (HOLD/REQUEST_REPLAN/APPROVE_WITH_CAVEAT/ACKNOWLEDGED_CLEAN), broadcasts final decision
+- `agents/run_agents.py`: full chain runner for both naive and gossip AEMO scenarios; emits band_audit_*.json and compliance_decision_*.json to outputs/
+- `agents/BAND_INTEGRATION.md`: swap-seam doc; interface→SDK mapping; open questions
+- `tests/test_agents.py`: 34 tests all passing
+- **Total: 70 tests, 70 passed, 0 failed**
+- Day 3 git commit: (see below after commit)
+
+### Hero demo numbers (AEMO-driven, confirmed)
+
+**NAIVE chain:**
+- Forecaster: risk_level=CRITICAL, peak_synchrony_fraction=1.0
+- Compliance: ESCALATE — 471 battery_herding overvoltage breach events
+- Operator: HOLD
+- pv_export_flagged_as_protocol_failure: false
+
+**GOSSIP chain:**
+- Forecaster: risk_level=LOW, peak_synchrony_fraction=0.167
+- Compliance: APPROVED — 0 battery_herding overvoltage breach events
+- Operator: ACKNOWLEDGED_CLEAN
+- pv_export_flagged_as_protocol_failure: false
+
+**Band audit log (naive run, 8 entries):**
+```
+step=1  forecaster  -> BAND         [register]
+step=2  coordinator -> BAND         [register]
+step=3  compliance  -> BAND         [register]
+step=4  operator    -> BAND         [register]
+step=5  forecaster  -> coordinator  [handoff:risk_window]
+step=6  coordinator -> compliance   [handoff:dispatch_plan_and_trajectory]
+step=7  compliance  -> operator     [handoff:compliance_escalation]
+step=8  operator    -> ALL          [operator_decision]
+```
+
 ## NEXT
 
-- Day 3-4: Band SDK integration. Four agents (Forecaster, Coordinator, Compliance, Operator)
-  - Compliance agent catches `battery_herding` overvoltage breach events specifically
-  - Each event in `voltage_breach_events` has: node_id, step, time_hhmm, voltage_pu, band_limit_crossed, band_limit_value, cause
-  - `cause: "battery_herding"` is what Compliance watches for; `cause: "pv_export"` events are midday/smart-inverter territory and must NOT be confused with battery events
+- Post-kickoff: swap MockBand for real Band client behind band_interface.py; then Layer 3 visualisation
+- Layer 3: standalone HTML/Canvas animation playing back JSON: neighbourhood pulsing sync then staggered, aggregate curve split-screen, compliance breach moment
 
 ## VERIFIED NUMBERS
 

@@ -1,0 +1,2430 @@
+{
+  "scenario_name": "naive_homogeneous",
+  "load_source": "aemo",
+  "strategy": "gossip",
+  "reviewed_by": "compliance",
+  "review_timestamp": "2026-06-11T10:03:06.265261+00:00",
+  "upstream_band_step": 6,
+  "forecaster_risk_level": "CRITICAL",
+  "coordinator_rounds_to_converge": 1,
+  "coordinator_synchrony_ratio": 0.167,
+  "total_breach_events": 1178,
+  "herding_overvolt_event_count": 471,
+  "herding_undervolt_event_count": 516,
+  "pv_export_event_count": 0,
+  "pv_export_flagged_as_protocol_failure": false,
+  "compliance_decision": "ESCALATE",
+  "reason": "Battery-herding overvoltage detected: 471 breach events. Gossip coordination did not eliminate all herding spikes. Human operator decision required.",
+  "breach_sample": [
+    {
+      "step": 211,
+      "time_hhmm": "17:35",
+      "node_id": 27,
+      "voltage_pu": 1.1025,
+      "band_limit_crossed": "upper",
+      "band_limit_value": 1.1,
+      "cause": "battery_herding"
+    },
+    {
+      "step": 211,
+      "time_hhmm": "17:35",
+      "node_id": 28,
+      "voltage_pu": 1.1051,
+      "band_limit_crossed": "upper",
+      "band_limit_value": 1.1,
+      "cause": "battery_herding"
+    },
+    {
+      "step": 211,
+      "time_hhmm": "17:35",
+      "node_id": 29,
+      "voltage_pu": 1.1076,
+      "band_limit_crossed": "upper",
+      "band_limit_value": 1.1,
+      "cause": "battery_herding"
+    },
+    {
+      "step": 211,
+      "time_hhmm": "17:35",
+      "node_id": 30,
+      "voltage_pu": 1.1106,
+      "band_limit_crossed": "upper",
+      "band_limit_value": 1.1,
+      "cause": "battery_herding"
+    },
+    {
+      "step": 211,
+      "time_hhmm": "17:35",
+      "node_id": 31,
+      "voltage_pu": 1.1135,
+      "band_limit_crossed": "upper",
+      "band_limit_value": 1.1,
+      "cause": "battery_herding"
+    }
+  ],
+  "all_herding_overvolt_node_steps": [
+    {
+      "node_id": 27,
+      "step": 211,
+      "voltage_pu": 1.1025
+    },
+    {
+      "node_id": 28,
+      "step": 211,
+      "voltage_pu": 1.1051
+    },
+    {
+      "node_id": 29,
+      "step": 211,
+      "voltage_pu": 1.1076
+    },
+    {
+      "node_id": 30,
+      "step": 211,
+      "voltage_pu": 1.1106
+    },
+    {
+      "node_id": 31,
+      "step": 211,
+      "voltage_pu": 1.1135
+    },
+    {
+      "node_id": 32,
+      "step": 211,
+      "voltage_pu": 1.1163
+    },
+    {
+      "node_id": 33,
+      "step": 211,
+      "voltage_pu": 1.1198
+    },
+    {
+      "node_id": 34,
+      "step": 211,
+      "voltage_pu": 1.1231
+    },
+    {
+      "node_id": 35,
+      "step": 211,
+      "voltage_pu": 1.1263
+    },
+    {
+      "node_id": 36,
+      "step": 211,
+      "voltage_pu": 1.1294
+    },
+    {
+      "node_id": 37,
+      "step": 211,
+      "voltage_pu": 1.1323
+    },
+    {
+      "node_id": 38,
+      "step": 211,
+      "voltage_pu": 1.1361
+    },
+    {
+      "node_id": 39,
+      "step": 211,
+      "voltage_pu": 1.1388
+    },
+    {
+      "node_id": 40,
+      "step": 211,
+      "voltage_pu": 1.1419
+    },
+    {
+      "node_id": 41,
+      "step": 211,
+      "voltage_pu": 1.1453
+    },
+    {
+      "node_id": 42,
+      "step": 211,
+      "voltage_pu": 1.1476
+    },
+    {
+      "node_id": 43,
+      "step": 211,
+      "voltage_pu": 1.1507
+    },
+    {
+      "node_id": 44,
+      "step": 211,
+      "voltage_pu": 1.1532
+    },
+    {
+      "node_id": 45,
+      "step": 211,
+      "voltage_pu": 1.1566
+    },
+    {
+      "node_id": 46,
+      "step": 211,
+      "voltage_pu": 1.1601
+    },
+    {
+      "node_id": 47,
+      "step": 211,
+      "voltage_pu": 1.1631
+    },
+    {
+      "node_id": 48,
+      "step": 211,
+      "voltage_pu": 1.1662
+    },
+    {
+      "node_id": 49,
+      "step": 211,
+      "voltage_pu": 1.1685
+    },
+    {
+      "node_id": 50,
+      "step": 211,
+      "voltage_pu": 1.1716
+    },
+    {
+      "node_id": 51,
+      "step": 211,
+      "voltage_pu": 1.1749
+    },
+    {
+      "node_id": 52,
+      "step": 211,
+      "voltage_pu": 1.1782
+    },
+    {
+      "node_id": 53,
+      "step": 211,
+      "voltage_pu": 1.1808
+    },
+    {
+      "node_id": 54,
+      "step": 211,
+      "voltage_pu": 1.1838
+    },
+    {
+      "node_id": 55,
+      "step": 211,
+      "voltage_pu": 1.1874
+    },
+    {
+      "node_id": 56,
+      "step": 211,
+      "voltage_pu": 1.1904
+    },
+    {
+      "node_id": 57,
+      "step": 211,
+      "voltage_pu": 1.1935
+    },
+    {
+      "node_id": 58,
+      "step": 211,
+      "voltage_pu": 1.1961
+    },
+    {
+      "node_id": 59,
+      "step": 211,
+      "voltage_pu": 1.1992
+    },
+    {
+      "node_id": 27,
+      "step": 212,
+      "voltage_pu": 1.1024
+    },
+    {
+      "node_id": 28,
+      "step": 212,
+      "voltage_pu": 1.105
+    },
+    {
+      "node_id": 29,
+      "step": 212,
+      "voltage_pu": 1.1076
+    },
+    {
+      "node_id": 30,
+      "step": 212,
+      "voltage_pu": 1.1105
+    },
+    {
+      "node_id": 31,
+      "step": 212,
+      "voltage_pu": 1.1135
+    },
+    {
+      "node_id": 32,
+      "step": 212,
+      "voltage_pu": 1.1162
+    },
+    {
+      "node_id": 33,
+      "step": 212,
+      "voltage_pu": 1.1198
+    },
+    {
+      "node_id": 34,
+      "step": 212,
+      "voltage_pu": 1.1229
+    },
+    {
+      "node_id": 35,
+      "step": 212,
+      "voltage_pu": 1.1263
+    },
+    {
+      "node_id": 36,
+      "step": 212,
+      "voltage_pu": 1.1293
+    },
+    {
+      "node_id": 37,
+      "step": 212,
+      "voltage_pu": 1.1322
+    },
+    {
+      "node_id": 38,
+      "step": 212,
+      "voltage_pu": 1.1359
+    },
+    {
+      "node_id": 39,
+      "step": 212,
+      "voltage_pu": 1.1386
+    },
+    {
+      "node_id": 40,
+      "step": 212,
+      "voltage_pu": 1.1416
+    },
+    {
+      "node_id": 41,
+      "step": 212,
+      "voltage_pu": 1.1451
+    },
+    {
+      "node_id": 42,
+      "step": 212,
+      "voltage_pu": 1.1474
+    },
+    {
+      "node_id": 43,
+      "step": 212,
+      "voltage_pu": 1.1504
+    },
+    {
+      "node_id": 44,
+      "step": 212,
+      "voltage_pu": 1.153
+    },
+    {
+      "node_id": 45,
+      "step": 212,
+      "voltage_pu": 1.1563
+    },
+    {
+      "node_id": 46,
+      "step": 212,
+      "voltage_pu": 1.1597
+    },
+    {
+      "node_id": 47,
+      "step": 212,
+      "voltage_pu": 1.1628
+    },
+    {
+      "node_id": 48,
+      "step": 212,
+      "voltage_pu": 1.1659
+    },
+    {
+      "node_id": 49,
+      "step": 212,
+      "voltage_pu": 1.1681
+    },
+    {
+      "node_id": 50,
+      "step": 212,
+      "voltage_pu": 1.171
+    },
+    {
+      "node_id": 51,
+      "step": 212,
+      "voltage_pu": 1.1744
+    },
+    {
+      "node_id": 52,
+      "step": 212,
+      "voltage_pu": 1.1777
+    },
+    {
+      "node_id": 53,
+      "step": 212,
+      "voltage_pu": 1.1803
+    },
+    {
+      "node_id": 54,
+      "step": 212,
+      "voltage_pu": 1.1834
+    },
+    {
+      "node_id": 55,
+      "step": 212,
+      "voltage_pu": 1.1868
+    },
+    {
+      "node_id": 56,
+      "step": 212,
+      "voltage_pu": 1.1899
+    },
+    {
+      "node_id": 57,
+      "step": 212,
+      "voltage_pu": 1.193
+    },
+    {
+      "node_id": 58,
+      "step": 212,
+      "voltage_pu": 1.1956
+    },
+    {
+      "node_id": 59,
+      "step": 212,
+      "voltage_pu": 1.1986
+    },
+    {
+      "node_id": 27,
+      "step": 213,
+      "voltage_pu": 1.1023
+    },
+    {
+      "node_id": 28,
+      "step": 213,
+      "voltage_pu": 1.1049
+    },
+    {
+      "node_id": 29,
+      "step": 213,
+      "voltage_pu": 1.1075
+    },
+    {
+      "node_id": 30,
+      "step": 213,
+      "voltage_pu": 1.1104
+    },
+    {
+      "node_id": 31,
+      "step": 213,
+      "voltage_pu": 1.1134
+    },
+    {
+      "node_id": 32,
+      "step": 213,
+      "voltage_pu": 1.1162
+    },
+    {
+      "node_id": 33,
+      "step": 213,
+      "voltage_pu": 1.1197
+    },
+    {
+      "node_id": 34,
+      "step": 213,
+      "voltage_pu": 1.123
+    },
+    {
+      "node_id": 35,
+      "step": 213,
+      "voltage_pu": 1.1262
+    },
+    {
+      "node_id": 36,
+      "step": 213,
+      "voltage_pu": 1.1292
+    },
+    {
+      "node_id": 37,
+      "step": 213,
+      "voltage_pu": 1.132
+    },
+    {
+      "node_id": 38,
+      "step": 213,
+      "voltage_pu": 1.1358
+    },
+    {
+      "node_id": 39,
+      "step": 213,
+      "voltage_pu": 1.1385
+    },
+    {
+      "node_id": 40,
+      "step": 213,
+      "voltage_pu": 1.1414
+    },
+    {
+      "node_id": 41,
+      "step": 213,
+      "voltage_pu": 1.1448
+    },
+    {
+      "node_id": 42,
+      "step": 213,
+      "voltage_pu": 1.1472
+    },
+    {
+      "node_id": 43,
+      "step": 213,
+      "voltage_pu": 1.1501
+    },
+    {
+      "node_id": 44,
+      "step": 213,
+      "voltage_pu": 1.1527
+    },
+    {
+      "node_id": 45,
+      "step": 213,
+      "voltage_pu": 1.156
+    },
+    {
+      "node_id": 46,
+      "step": 213,
+      "voltage_pu": 1.1595
+    },
+    {
+      "node_id": 47,
+      "step": 213,
+      "voltage_pu": 1.1626
+    },
+    {
+      "node_id": 48,
+      "step": 213,
+      "voltage_pu": 1.1657
+    },
+    {
+      "node_id": 49,
+      "step": 213,
+      "voltage_pu": 1.168
+    },
+    {
+      "node_id": 50,
+      "step": 213,
+      "voltage_pu": 1.1709
+    },
+    {
+      "node_id": 51,
+      "step": 213,
+      "voltage_pu": 1.1743
+    },
+    {
+      "node_id": 52,
+      "step": 213,
+      "voltage_pu": 1.1775
+    },
+    {
+      "node_id": 53,
+      "step": 213,
+      "voltage_pu": 1.1801
+    },
+    {
+      "node_id": 54,
+      "step": 213,
+      "voltage_pu": 1.1832
+    },
+    {
+      "node_id": 55,
+      "step": 213,
+      "voltage_pu": 1.1866
+    },
+    {
+      "node_id": 56,
+      "step": 213,
+      "voltage_pu": 1.1896
+    },
+    {
+      "node_id": 57,
+      "step": 213,
+      "voltage_pu": 1.1926
+    },
+    {
+      "node_id": 58,
+      "step": 213,
+      "voltage_pu": 1.1953
+    },
+    {
+      "node_id": 59,
+      "step": 213,
+      "voltage_pu": 1.1982
+    },
+    {
+      "node_id": 27,
+      "step": 214,
+      "voltage_pu": 1.1028
+    },
+    {
+      "node_id": 28,
+      "step": 214,
+      "voltage_pu": 1.1053
+    },
+    {
+      "node_id": 29,
+      "step": 214,
+      "voltage_pu": 1.108
+    },
+    {
+      "node_id": 30,
+      "step": 214,
+      "voltage_pu": 1.1109
+    },
+    {
+      "node_id": 31,
+      "step": 214,
+      "voltage_pu": 1.1139
+    },
+    {
+      "node_id": 32,
+      "step": 214,
+      "voltage_pu": 1.1166
+    },
+    {
+      "node_id": 33,
+      "step": 214,
+      "voltage_pu": 1.1202
+    },
+    {
+      "node_id": 34,
+      "step": 214,
+      "voltage_pu": 1.1235
+    },
+    {
+      "node_id": 35,
+      "step": 214,
+      "voltage_pu": 1.1267
+    },
+    {
+      "node_id": 36,
+      "step": 214,
+      "voltage_pu": 1.1297
+    },
+    {
+      "node_id": 37,
+      "step": 214,
+      "voltage_pu": 1.1327
+    },
+    {
+      "node_id": 38,
+      "step": 214,
+      "voltage_pu": 1.1363
+    },
+    {
+      "node_id": 39,
+      "step": 214,
+      "voltage_pu": 1.1391
+    },
+    {
+      "node_id": 40,
+      "step": 214,
+      "voltage_pu": 1.1421
+    },
+    {
+      "node_id": 41,
+      "step": 214,
+      "voltage_pu": 1.1455
+    },
+    {
+      "node_id": 42,
+      "step": 214,
+      "voltage_pu": 1.1478
+    },
+    {
+      "node_id": 43,
+      "step": 214,
+      "voltage_pu": 1.1509
+    },
+    {
+      "node_id": 44,
+      "step": 214,
+      "voltage_pu": 1.1535
+    },
+    {
+      "node_id": 45,
+      "step": 214,
+      "voltage_pu": 1.1569
+    },
+    {
+      "node_id": 46,
+      "step": 214,
+      "voltage_pu": 1.1604
+    },
+    {
+      "node_id": 47,
+      "step": 214,
+      "voltage_pu": 1.1634
+    },
+    {
+      "node_id": 48,
+      "step": 214,
+      "voltage_pu": 1.1666
+    },
+    {
+      "node_id": 49,
+      "step": 214,
+      "voltage_pu": 1.1689
+    },
+    {
+      "node_id": 50,
+      "step": 214,
+      "voltage_pu": 1.1718
+    },
+    {
+      "node_id": 51,
+      "step": 214,
+      "voltage_pu": 1.1751
+    },
+    {
+      "node_id": 52,
+      "step": 214,
+      "voltage_pu": 1.1783
+    },
+    {
+      "node_id": 53,
+      "step": 214,
+      "voltage_pu": 1.181
+    },
+    {
+      "node_id": 54,
+      "step": 214,
+      "voltage_pu": 1.1841
+    },
+    {
+      "node_id": 55,
+      "step": 214,
+      "voltage_pu": 1.1876
+    },
+    {
+      "node_id": 56,
+      "step": 214,
+      "voltage_pu": 1.1906
+    },
+    {
+      "node_id": 57,
+      "step": 214,
+      "voltage_pu": 1.1936
+    },
+    {
+      "node_id": 58,
+      "step": 214,
+      "voltage_pu": 1.1964
+    },
+    {
+      "node_id": 59,
+      "step": 214,
+      "voltage_pu": 1.1994
+    },
+    {
+      "node_id": 27,
+      "step": 215,
+      "voltage_pu": 1.1028
+    },
+    {
+      "node_id": 28,
+      "step": 215,
+      "voltage_pu": 1.1054
+    },
+    {
+      "node_id": 29,
+      "step": 215,
+      "voltage_pu": 1.108
+    },
+    {
+      "node_id": 30,
+      "step": 215,
+      "voltage_pu": 1.1109
+    },
+    {
+      "node_id": 31,
+      "step": 215,
+      "voltage_pu": 1.1139
+    },
+    {
+      "node_id": 32,
+      "step": 215,
+      "voltage_pu": 1.1166
+    },
+    {
+      "node_id": 33,
+      "step": 215,
+      "voltage_pu": 1.1202
+    },
+    {
+      "node_id": 34,
+      "step": 215,
+      "voltage_pu": 1.1234
+    },
+    {
+      "node_id": 35,
+      "step": 215,
+      "voltage_pu": 1.1267
+    },
+    {
+      "node_id": 36,
+      "step": 215,
+      "voltage_pu": 1.1297
+    },
+    {
+      "node_id": 37,
+      "step": 215,
+      "voltage_pu": 1.1325
+    },
+    {
+      "node_id": 38,
+      "step": 215,
+      "voltage_pu": 1.1361
+    },
+    {
+      "node_id": 39,
+      "step": 215,
+      "voltage_pu": 1.1388
+    },
+    {
+      "node_id": 40,
+      "step": 215,
+      "voltage_pu": 1.1418
+    },
+    {
+      "node_id": 41,
+      "step": 215,
+      "voltage_pu": 1.1453
+    },
+    {
+      "node_id": 42,
+      "step": 215,
+      "voltage_pu": 1.1477
+    },
+    {
+      "node_id": 43,
+      "step": 215,
+      "voltage_pu": 1.1507
+    },
+    {
+      "node_id": 44,
+      "step": 215,
+      "voltage_pu": 1.1534
+    },
+    {
+      "node_id": 45,
+      "step": 215,
+      "voltage_pu": 1.1567
+    },
+    {
+      "node_id": 46,
+      "step": 215,
+      "voltage_pu": 1.1601
+    },
+    {
+      "node_id": 47,
+      "step": 215,
+      "voltage_pu": 1.1632
+    },
+    {
+      "node_id": 48,
+      "step": 215,
+      "voltage_pu": 1.1664
+    },
+    {
+      "node_id": 49,
+      "step": 215,
+      "voltage_pu": 1.1688
+    },
+    {
+      "node_id": 50,
+      "step": 215,
+      "voltage_pu": 1.1717
+    },
+    {
+      "node_id": 51,
+      "step": 215,
+      "voltage_pu": 1.175
+    },
+    {
+      "node_id": 52,
+      "step": 215,
+      "voltage_pu": 1.1783
+    },
+    {
+      "node_id": 53,
+      "step": 215,
+      "voltage_pu": 1.1809
+    },
+    {
+      "node_id": 54,
+      "step": 215,
+      "voltage_pu": 1.1841
+    },
+    {
+      "node_id": 55,
+      "step": 215,
+      "voltage_pu": 1.1875
+    },
+    {
+      "node_id": 56,
+      "step": 215,
+      "voltage_pu": 1.1905
+    },
+    {
+      "node_id": 57,
+      "step": 215,
+      "voltage_pu": 1.1935
+    },
+    {
+      "node_id": 58,
+      "step": 215,
+      "voltage_pu": 1.1963
+    },
+    {
+      "node_id": 59,
+      "step": 215,
+      "voltage_pu": 1.1993
+    },
+    {
+      "node_id": 26,
+      "step": 216,
+      "voltage_pu": 1.1002
+    },
+    {
+      "node_id": 27,
+      "step": 216,
+      "voltage_pu": 1.103
+    },
+    {
+      "node_id": 28,
+      "step": 216,
+      "voltage_pu": 1.1057
+    },
+    {
+      "node_id": 29,
+      "step": 216,
+      "voltage_pu": 1.1083
+    },
+    {
+      "node_id": 30,
+      "step": 216,
+      "voltage_pu": 1.1111
+    },
+    {
+      "node_id": 31,
+      "step": 216,
+      "voltage_pu": 1.1141
+    },
+    {
+      "node_id": 32,
+      "step": 216,
+      "voltage_pu": 1.1168
+    },
+    {
+      "node_id": 33,
+      "step": 216,
+      "voltage_pu": 1.1203
+    },
+    {
+      "node_id": 34,
+      "step": 216,
+      "voltage_pu": 1.1235
+    },
+    {
+      "node_id": 35,
+      "step": 216,
+      "voltage_pu": 1.1267
+    },
+    {
+      "node_id": 36,
+      "step": 216,
+      "voltage_pu": 1.1297
+    },
+    {
+      "node_id": 37,
+      "step": 216,
+      "voltage_pu": 1.1326
+    },
+    {
+      "node_id": 38,
+      "step": 216,
+      "voltage_pu": 1.1363
+    },
+    {
+      "node_id": 39,
+      "step": 216,
+      "voltage_pu": 1.1391
+    },
+    {
+      "node_id": 40,
+      "step": 216,
+      "voltage_pu": 1.142
+    },
+    {
+      "node_id": 41,
+      "step": 216,
+      "voltage_pu": 1.1454
+    },
+    {
+      "node_id": 42,
+      "step": 216,
+      "voltage_pu": 1.1478
+    },
+    {
+      "node_id": 43,
+      "step": 216,
+      "voltage_pu": 1.1508
+    },
+    {
+      "node_id": 44,
+      "step": 216,
+      "voltage_pu": 1.1535
+    },
+    {
+      "node_id": 45,
+      "step": 216,
+      "voltage_pu": 1.1568
+    },
+    {
+      "node_id": 46,
+      "step": 216,
+      "voltage_pu": 1.1603
+    },
+    {
+      "node_id": 47,
+      "step": 216,
+      "voltage_pu": 1.1634
+    },
+    {
+      "node_id": 48,
+      "step": 216,
+      "voltage_pu": 1.1666
+    },
+    {
+      "node_id": 49,
+      "step": 216,
+      "voltage_pu": 1.1689
+    },
+    {
+      "node_id": 50,
+      "step": 216,
+      "voltage_pu": 1.1719
+    },
+    {
+      "node_id": 51,
+      "step": 216,
+      "voltage_pu": 1.1751
+    },
+    {
+      "node_id": 52,
+      "step": 216,
+      "voltage_pu": 1.1783
+    },
+    {
+      "node_id": 53,
+      "step": 216,
+      "voltage_pu": 1.181
+    },
+    {
+      "node_id": 54,
+      "step": 216,
+      "voltage_pu": 1.1842
+    },
+    {
+      "node_id": 55,
+      "step": 216,
+      "voltage_pu": 1.1877
+    },
+    {
+      "node_id": 56,
+      "step": 216,
+      "voltage_pu": 1.1907
+    },
+    {
+      "node_id": 57,
+      "step": 216,
+      "voltage_pu": 1.1937
+    },
+    {
+      "node_id": 58,
+      "step": 216,
+      "voltage_pu": 1.1964
+    },
+    {
+      "node_id": 59,
+      "step": 216,
+      "voltage_pu": 1.1994
+    },
+    {
+      "node_id": 26,
+      "step": 217,
+      "voltage_pu": 1.1004
+    },
+    {
+      "node_id": 27,
+      "step": 217,
+      "voltage_pu": 1.1033
+    },
+    {
+      "node_id": 28,
+      "step": 217,
+      "voltage_pu": 1.106
+    },
+    {
+      "node_id": 29,
+      "step": 217,
+      "voltage_pu": 1.1086
+    },
+    {
+      "node_id": 30,
+      "step": 217,
+      "voltage_pu": 1.1114
+    },
+    {
+      "node_id": 31,
+      "step": 217,
+      "voltage_pu": 1.1145
+    },
+    {
+      "node_id": 32,
+      "step": 217,
+      "voltage_pu": 1.1173
+    },
+    {
+      "node_id": 33,
+      "step": 217,
+      "voltage_pu": 1.1208
+    },
+    {
+      "node_id": 34,
+      "step": 217,
+      "voltage_pu": 1.124
+    },
+    {
+      "node_id": 35,
+      "step": 217,
+      "voltage_pu": 1.1273
+    },
+    {
+      "node_id": 36,
+      "step": 217,
+      "voltage_pu": 1.1303
+    },
+    {
+      "node_id": 37,
+      "step": 217,
+      "voltage_pu": 1.1331
+    },
+    {
+      "node_id": 38,
+      "step": 217,
+      "voltage_pu": 1.1367
+    },
+    {
+      "node_id": 39,
+      "step": 217,
+      "voltage_pu": 1.1395
+    },
+    {
+      "node_id": 40,
+      "step": 217,
+      "voltage_pu": 1.1425
+    },
+    {
+      "node_id": 41,
+      "step": 217,
+      "voltage_pu": 1.146
+    },
+    {
+      "node_id": 42,
+      "step": 217,
+      "voltage_pu": 1.1485
+    },
+    {
+      "node_id": 43,
+      "step": 217,
+      "voltage_pu": 1.1515
+    },
+    {
+      "node_id": 44,
+      "step": 217,
+      "voltage_pu": 1.1541
+    },
+    {
+      "node_id": 45,
+      "step": 217,
+      "voltage_pu": 1.1574
+    },
+    {
+      "node_id": 46,
+      "step": 217,
+      "voltage_pu": 1.1608
+    },
+    {
+      "node_id": 47,
+      "step": 217,
+      "voltage_pu": 1.164
+    },
+    {
+      "node_id": 48,
+      "step": 217,
+      "voltage_pu": 1.1672
+    },
+    {
+      "node_id": 49,
+      "step": 217,
+      "voltage_pu": 1.1697
+    },
+    {
+      "node_id": 50,
+      "step": 217,
+      "voltage_pu": 1.1725
+    },
+    {
+      "node_id": 51,
+      "step": 217,
+      "voltage_pu": 1.1758
+    },
+    {
+      "node_id": 52,
+      "step": 217,
+      "voltage_pu": 1.179
+    },
+    {
+      "node_id": 53,
+      "step": 217,
+      "voltage_pu": 1.1818
+    },
+    {
+      "node_id": 54,
+      "step": 217,
+      "voltage_pu": 1.185
+    },
+    {
+      "node_id": 55,
+      "step": 217,
+      "voltage_pu": 1.1884
+    },
+    {
+      "node_id": 56,
+      "step": 217,
+      "voltage_pu": 1.1914
+    },
+    {
+      "node_id": 57,
+      "step": 217,
+      "voltage_pu": 1.1945
+    },
+    {
+      "node_id": 58,
+      "step": 217,
+      "voltage_pu": 1.1972
+    },
+    {
+      "node_id": 59,
+      "step": 217,
+      "voltage_pu": 1.2003
+    },
+    {
+      "node_id": 26,
+      "step": 218,
+      "voltage_pu": 1.1005
+    },
+    {
+      "node_id": 27,
+      "step": 218,
+      "voltage_pu": 1.1035
+    },
+    {
+      "node_id": 28,
+      "step": 218,
+      "voltage_pu": 1.1062
+    },
+    {
+      "node_id": 29,
+      "step": 218,
+      "voltage_pu": 1.1088
+    },
+    {
+      "node_id": 30,
+      "step": 218,
+      "voltage_pu": 1.1116
+    },
+    {
+      "node_id": 31,
+      "step": 218,
+      "voltage_pu": 1.1147
+    },
+    {
+      "node_id": 32,
+      "step": 218,
+      "voltage_pu": 1.1174
+    },
+    {
+      "node_id": 33,
+      "step": 218,
+      "voltage_pu": 1.1209
+    },
+    {
+      "node_id": 34,
+      "step": 218,
+      "voltage_pu": 1.1241
+    },
+    {
+      "node_id": 35,
+      "step": 218,
+      "voltage_pu": 1.1274
+    },
+    {
+      "node_id": 36,
+      "step": 218,
+      "voltage_pu": 1.1304
+    },
+    {
+      "node_id": 37,
+      "step": 218,
+      "voltage_pu": 1.1333
+    },
+    {
+      "node_id": 38,
+      "step": 218,
+      "voltage_pu": 1.1369
+    },
+    {
+      "node_id": 39,
+      "step": 218,
+      "voltage_pu": 1.1397
+    },
+    {
+      "node_id": 40,
+      "step": 218,
+      "voltage_pu": 1.1425
+    },
+    {
+      "node_id": 41,
+      "step": 218,
+      "voltage_pu": 1.146
+    },
+    {
+      "node_id": 42,
+      "step": 218,
+      "voltage_pu": 1.1485
+    },
+    {
+      "node_id": 43,
+      "step": 218,
+      "voltage_pu": 1.1515
+    },
+    {
+      "node_id": 44,
+      "step": 218,
+      "voltage_pu": 1.1542
+    },
+    {
+      "node_id": 45,
+      "step": 218,
+      "voltage_pu": 1.1576
+    },
+    {
+      "node_id": 46,
+      "step": 218,
+      "voltage_pu": 1.161
+    },
+    {
+      "node_id": 47,
+      "step": 218,
+      "voltage_pu": 1.1642
+    },
+    {
+      "node_id": 48,
+      "step": 218,
+      "voltage_pu": 1.1675
+    },
+    {
+      "node_id": 49,
+      "step": 218,
+      "voltage_pu": 1.1698
+    },
+    {
+      "node_id": 50,
+      "step": 218,
+      "voltage_pu": 1.1727
+    },
+    {
+      "node_id": 51,
+      "step": 218,
+      "voltage_pu": 1.176
+    },
+    {
+      "node_id": 52,
+      "step": 218,
+      "voltage_pu": 1.1792
+    },
+    {
+      "node_id": 53,
+      "step": 218,
+      "voltage_pu": 1.1819
+    },
+    {
+      "node_id": 54,
+      "step": 218,
+      "voltage_pu": 1.1851
+    },
+    {
+      "node_id": 55,
+      "step": 218,
+      "voltage_pu": 1.1886
+    },
+    {
+      "node_id": 56,
+      "step": 218,
+      "voltage_pu": 1.1917
+    },
+    {
+      "node_id": 57,
+      "step": 218,
+      "voltage_pu": 1.1947
+    },
+    {
+      "node_id": 58,
+      "step": 218,
+      "voltage_pu": 1.1975
+    },
+    {
+      "node_id": 59,
+      "step": 218,
+      "voltage_pu": 1.2005
+    },
+    {
+      "node_id": 26,
+      "step": 219,
+      "voltage_pu": 1.1007
+    },
+    {
+      "node_id": 27,
+      "step": 219,
+      "voltage_pu": 1.1037
+    },
+    {
+      "node_id": 28,
+      "step": 219,
+      "voltage_pu": 1.1064
+    },
+    {
+      "node_id": 29,
+      "step": 219,
+      "voltage_pu": 1.1091
+    },
+    {
+      "node_id": 30,
+      "step": 219,
+      "voltage_pu": 1.112
+    },
+    {
+      "node_id": 31,
+      "step": 219,
+      "voltage_pu": 1.1151
+    },
+    {
+      "node_id": 32,
+      "step": 219,
+      "voltage_pu": 1.1178
+    },
+    {
+      "node_id": 33,
+      "step": 219,
+      "voltage_pu": 1.1213
+    },
+    {
+      "node_id": 34,
+      "step": 219,
+      "voltage_pu": 1.1245
+    },
+    {
+      "node_id": 35,
+      "step": 219,
+      "voltage_pu": 1.1277
+    },
+    {
+      "node_id": 36,
+      "step": 219,
+      "voltage_pu": 1.1307
+    },
+    {
+      "node_id": 37,
+      "step": 219,
+      "voltage_pu": 1.1335
+    },
+    {
+      "node_id": 38,
+      "step": 219,
+      "voltage_pu": 1.1371
+    },
+    {
+      "node_id": 39,
+      "step": 219,
+      "voltage_pu": 1.1399
+    },
+    {
+      "node_id": 40,
+      "step": 219,
+      "voltage_pu": 1.1429
+    },
+    {
+      "node_id": 41,
+      "step": 219,
+      "voltage_pu": 1.1463
+    },
+    {
+      "node_id": 42,
+      "step": 219,
+      "voltage_pu": 1.1488
+    },
+    {
+      "node_id": 43,
+      "step": 219,
+      "voltage_pu": 1.1517
+    },
+    {
+      "node_id": 44,
+      "step": 219,
+      "voltage_pu": 1.1545
+    },
+    {
+      "node_id": 45,
+      "step": 219,
+      "voltage_pu": 1.1578
+    },
+    {
+      "node_id": 46,
+      "step": 219,
+      "voltage_pu": 1.1612
+    },
+    {
+      "node_id": 47,
+      "step": 219,
+      "voltage_pu": 1.1644
+    },
+    {
+      "node_id": 48,
+      "step": 219,
+      "voltage_pu": 1.1676
+    },
+    {
+      "node_id": 49,
+      "step": 219,
+      "voltage_pu": 1.17
+    },
+    {
+      "node_id": 50,
+      "step": 219,
+      "voltage_pu": 1.1729
+    },
+    {
+      "node_id": 51,
+      "step": 219,
+      "voltage_pu": 1.1762
+    },
+    {
+      "node_id": 52,
+      "step": 219,
+      "voltage_pu": 1.1794
+    },
+    {
+      "node_id": 53,
+      "step": 219,
+      "voltage_pu": 1.1822
+    },
+    {
+      "node_id": 54,
+      "step": 219,
+      "voltage_pu": 1.1853
+    },
+    {
+      "node_id": 55,
+      "step": 219,
+      "voltage_pu": 1.1888
+    },
+    {
+      "node_id": 56,
+      "step": 219,
+      "voltage_pu": 1.1918
+    },
+    {
+      "node_id": 57,
+      "step": 219,
+      "voltage_pu": 1.1948
+    },
+    {
+      "node_id": 58,
+      "step": 219,
+      "voltage_pu": 1.1976
+    },
+    {
+      "node_id": 59,
+      "step": 219,
+      "voltage_pu": 1.2006
+    },
+    {
+      "node_id": 26,
+      "step": 220,
+      "voltage_pu": 1.1009
+    },
+    {
+      "node_id": 27,
+      "step": 220,
+      "voltage_pu": 1.1038
+    },
+    {
+      "node_id": 28,
+      "step": 220,
+      "voltage_pu": 1.1066
+    },
+    {
+      "node_id": 29,
+      "step": 220,
+      "voltage_pu": 1.1093
+    },
+    {
+      "node_id": 30,
+      "step": 220,
+      "voltage_pu": 1.1121
+    },
+    {
+      "node_id": 31,
+      "step": 220,
+      "voltage_pu": 1.1153
+    },
+    {
+      "node_id": 32,
+      "step": 220,
+      "voltage_pu": 1.118
+    },
+    {
+      "node_id": 33,
+      "step": 220,
+      "voltage_pu": 1.1216
+    },
+    {
+      "node_id": 34,
+      "step": 220,
+      "voltage_pu": 1.1247
+    },
+    {
+      "node_id": 35,
+      "step": 220,
+      "voltage_pu": 1.128
+    },
+    {
+      "node_id": 36,
+      "step": 220,
+      "voltage_pu": 1.131
+    },
+    {
+      "node_id": 37,
+      "step": 220,
+      "voltage_pu": 1.1339
+    },
+    {
+      "node_id": 38,
+      "step": 220,
+      "voltage_pu": 1.1375
+    },
+    {
+      "node_id": 39,
+      "step": 220,
+      "voltage_pu": 1.1403
+    },
+    {
+      "node_id": 40,
+      "step": 220,
+      "voltage_pu": 1.1433
+    },
+    {
+      "node_id": 41,
+      "step": 220,
+      "voltage_pu": 1.1467
+    },
+    {
+      "node_id": 42,
+      "step": 220,
+      "voltage_pu": 1.1493
+    },
+    {
+      "node_id": 43,
+      "step": 220,
+      "voltage_pu": 1.1523
+    },
+    {
+      "node_id": 44,
+      "step": 220,
+      "voltage_pu": 1.1551
+    },
+    {
+      "node_id": 45,
+      "step": 220,
+      "voltage_pu": 1.1584
+    },
+    {
+      "node_id": 46,
+      "step": 220,
+      "voltage_pu": 1.1618
+    },
+    {
+      "node_id": 47,
+      "step": 220,
+      "voltage_pu": 1.1649
+    },
+    {
+      "node_id": 48,
+      "step": 220,
+      "voltage_pu": 1.1682
+    },
+    {
+      "node_id": 49,
+      "step": 220,
+      "voltage_pu": 1.1707
+    },
+    {
+      "node_id": 50,
+      "step": 220,
+      "voltage_pu": 1.1736
+    },
+    {
+      "node_id": 51,
+      "step": 220,
+      "voltage_pu": 1.1768
+    },
+    {
+      "node_id": 52,
+      "step": 220,
+      "voltage_pu": 1.1801
+    },
+    {
+      "node_id": 53,
+      "step": 220,
+      "voltage_pu": 1.1828
+    },
+    {
+      "node_id": 54,
+      "step": 220,
+      "voltage_pu": 1.186
+    },
+    {
+      "node_id": 55,
+      "step": 220,
+      "voltage_pu": 1.1894
+    },
+    {
+      "node_id": 56,
+      "step": 220,
+      "voltage_pu": 1.1925
+    },
+    {
+      "node_id": 57,
+      "step": 220,
+      "voltage_pu": 1.1956
+    },
+    {
+      "node_id": 58,
+      "step": 220,
+      "voltage_pu": 1.1984
+    },
+    {
+      "node_id": 59,
+      "step": 220,
+      "voltage_pu": 1.2015
+    },
+    {
+      "node_id": 26,
+      "step": 221,
+      "voltage_pu": 1.1013
+    },
+    {
+      "node_id": 27,
+      "step": 221,
+      "voltage_pu": 1.1043
+    },
+    {
+      "node_id": 28,
+      "step": 221,
+      "voltage_pu": 1.107
+    },
+    {
+      "node_id": 29,
+      "step": 221,
+      "voltage_pu": 1.1097
+    },
+    {
+      "node_id": 30,
+      "step": 221,
+      "voltage_pu": 1.1126
+    },
+    {
+      "node_id": 31,
+      "step": 221,
+      "voltage_pu": 1.1157
+    },
+    {
+      "node_id": 32,
+      "step": 221,
+      "voltage_pu": 1.1185
+    },
+    {
+      "node_id": 33,
+      "step": 221,
+      "voltage_pu": 1.122
+    },
+    {
+      "node_id": 34,
+      "step": 221,
+      "voltage_pu": 1.1251
+    },
+    {
+      "node_id": 35,
+      "step": 221,
+      "voltage_pu": 1.1284
+    },
+    {
+      "node_id": 36,
+      "step": 221,
+      "voltage_pu": 1.1314
+    },
+    {
+      "node_id": 37,
+      "step": 221,
+      "voltage_pu": 1.1343
+    },
+    {
+      "node_id": 38,
+      "step": 221,
+      "voltage_pu": 1.1379
+    },
+    {
+      "node_id": 39,
+      "step": 221,
+      "voltage_pu": 1.1408
+    },
+    {
+      "node_id": 40,
+      "step": 221,
+      "voltage_pu": 1.1437
+    },
+    {
+      "node_id": 41,
+      "step": 221,
+      "voltage_pu": 1.1471
+    },
+    {
+      "node_id": 42,
+      "step": 221,
+      "voltage_pu": 1.1497
+    },
+    {
+      "node_id": 43,
+      "step": 221,
+      "voltage_pu": 1.1527
+    },
+    {
+      "node_id": 44,
+      "step": 221,
+      "voltage_pu": 1.1554
+    },
+    {
+      "node_id": 45,
+      "step": 221,
+      "voltage_pu": 1.1587
+    },
+    {
+      "node_id": 46,
+      "step": 221,
+      "voltage_pu": 1.1621
+    },
+    {
+      "node_id": 47,
+      "step": 221,
+      "voltage_pu": 1.1654
+    },
+    {
+      "node_id": 48,
+      "step": 221,
+      "voltage_pu": 1.1687
+    },
+    {
+      "node_id": 49,
+      "step": 221,
+      "voltage_pu": 1.1711
+    },
+    {
+      "node_id": 50,
+      "step": 221,
+      "voltage_pu": 1.174
+    },
+    {
+      "node_id": 51,
+      "step": 221,
+      "voltage_pu": 1.1773
+    },
+    {
+      "node_id": 52,
+      "step": 221,
+      "voltage_pu": 1.1805
+    },
+    {
+      "node_id": 53,
+      "step": 221,
+      "voltage_pu": 1.1833
+    },
+    {
+      "node_id": 54,
+      "step": 221,
+      "voltage_pu": 1.1865
+    },
+    {
+      "node_id": 55,
+      "step": 221,
+      "voltage_pu": 1.1899
+    },
+    {
+      "node_id": 56,
+      "step": 221,
+      "voltage_pu": 1.1929
+    },
+    {
+      "node_id": 57,
+      "step": 221,
+      "voltage_pu": 1.196
+    },
+    {
+      "node_id": 58,
+      "step": 221,
+      "voltage_pu": 1.1988
+    },
+    {
+      "node_id": 59,
+      "step": 221,
+      "voltage_pu": 1.2018
+    },
+    {
+      "node_id": 26,
+      "step": 222,
+      "voltage_pu": 1.1017
+    },
+    {
+      "node_id": 27,
+      "step": 222,
+      "voltage_pu": 1.1047
+    },
+    {
+      "node_id": 28,
+      "step": 222,
+      "voltage_pu": 1.1075
+    },
+    {
+      "node_id": 29,
+      "step": 222,
+      "voltage_pu": 1.1102
+    },
+    {
+      "node_id": 30,
+      "step": 222,
+      "voltage_pu": 1.1131
+    },
+    {
+      "node_id": 31,
+      "step": 222,
+      "voltage_pu": 1.1163
+    },
+    {
+      "node_id": 32,
+      "step": 222,
+      "voltage_pu": 1.1191
+    },
+    {
+      "node_id": 33,
+      "step": 222,
+      "voltage_pu": 1.1226
+    },
+    {
+      "node_id": 34,
+      "step": 222,
+      "voltage_pu": 1.1258
+    },
+    {
+      "node_id": 35,
+      "step": 222,
+      "voltage_pu": 1.129
+    },
+    {
+      "node_id": 36,
+      "step": 222,
+      "voltage_pu": 1.132
+    },
+    {
+      "node_id": 37,
+      "step": 222,
+      "voltage_pu": 1.1348
+    },
+    {
+      "node_id": 38,
+      "step": 222,
+      "voltage_pu": 1.1384
+    },
+    {
+      "node_id": 39,
+      "step": 222,
+      "voltage_pu": 1.1414
+    },
+    {
+      "node_id": 40,
+      "step": 222,
+      "voltage_pu": 1.1443
+    },
+    {
+      "node_id": 41,
+      "step": 222,
+      "voltage_pu": 1.1477
+    },
+    {
+      "node_id": 42,
+      "step": 222,
+      "voltage_pu": 1.1502
+    },
+    {
+      "node_id": 43,
+      "step": 222,
+      "voltage_pu": 1.1532
+    },
+    {
+      "node_id": 44,
+      "step": 222,
+      "voltage_pu": 1.156
+    },
+    {
+      "node_id": 45,
+      "step": 222,
+      "voltage_pu": 1.1593
+    },
+    {
+      "node_id": 46,
+      "step": 222,
+      "voltage_pu": 1.1627
+    },
+    {
+      "node_id": 47,
+      "step": 222,
+      "voltage_pu": 1.166
+    },
+    {
+      "node_id": 48,
+      "step": 222,
+      "voltage_pu": 1.1693
+    },
+    {
+      "node_id": 49,
+      "step": 222,
+      "voltage_pu": 1.1718
+    },
+    {
+      "node_id": 50,
+      "step": 222,
+      "voltage_pu": 1.1746
+    },
+    {
+      "node_id": 51,
+      "step": 222,
+      "voltage_pu": 1.1778
+    },
+    {
+      "node_id": 52,
+      "step": 222,
+      "voltage_pu": 1.181
+    },
+    {
+      "node_id": 53,
+      "step": 222,
+      "voltage_pu": 1.1839
+    },
+    {
+      "node_id": 54,
+      "step": 222,
+      "voltage_pu": 1.1871
+    },
+    {
+      "node_id": 55,
+      "step": 222,
+      "voltage_pu": 1.1905
+    },
+    {
+      "node_id": 56,
+      "step": 222,
+      "voltage_pu": 1.1936
+    },
+    {
+      "node_id": 57,
+      "step": 222,
+      "voltage_pu": 1.1966
+    },
+    {
+      "node_id": 58,
+      "step": 222,
+      "voltage_pu": 1.1996
+    },
+    {
+      "node_id": 59,
+      "step": 222,
+      "voltage_pu": 1.2026
+    },
+    {
+      "node_id": 26,
+      "step": 223,
+      "voltage_pu": 1.1021
+    },
+    {
+      "node_id": 27,
+      "step": 223,
+      "voltage_pu": 1.1051
+    },
+    {
+      "node_id": 28,
+      "step": 223,
+      "voltage_pu": 1.1079
+    },
+    {
+      "node_id": 29,
+      "step": 223,
+      "voltage_pu": 1.1106
+    },
+    {
+      "node_id": 30,
+      "step": 223,
+      "voltage_pu": 1.1135
+    },
+    {
+      "node_id": 31,
+      "step": 223,
+      "voltage_pu": 1.1167
+    },
+    {
+      "node_id": 32,
+      "step": 223,
+      "voltage_pu": 1.1195
+    },
+    {
+      "node_id": 33,
+      "step": 223,
+      "voltage_pu": 1.123
+    },
+    {
+      "node_id": 34,
+      "step": 223,
+      "voltage_pu": 1.1262
+    },
+    {
+      "node_id": 35,
+      "step": 223,
+      "voltage_pu": 1.1295
+    },
+    {
+      "node_id": 36,
+      "step": 223,
+      "voltage_pu": 1.1325
+    },
+    {
+      "node_id": 37,
+      "step": 223,
+      "voltage_pu": 1.1353
+    },
+    {
+      "node_id": 38,
+      "step": 223,
+      "voltage_pu": 1.1389
+    },
+    {
+      "node_id": 39,
+      "step": 223,
+      "voltage_pu": 1.1418
+    },
+    {
+      "node_id": 40,
+      "step": 223,
+      "voltage_pu": 1.1447
+    },
+    {
+      "node_id": 41,
+      "step": 223,
+      "voltage_pu": 1.1482
+    },
+    {
+      "node_id": 42,
+      "step": 223,
+      "voltage_pu": 1.1509
+    },
+    {
+      "node_id": 43,
+      "step": 223,
+      "voltage_pu": 1.1539
+    },
+    {
+      "node_id": 44,
+      "step": 223,
+      "voltage_pu": 1.1567
+    },
+    {
+      "node_id": 45,
+      "step": 223,
+      "voltage_pu": 1.16
+    },
+    {
+      "node_id": 46,
+      "step": 223,
+      "voltage_pu": 1.1635
+    },
+    {
+      "node_id": 47,
+      "step": 223,
+      "voltage_pu": 1.1667
+    },
+    {
+      "node_id": 48,
+      "step": 223,
+      "voltage_pu": 1.17
+    },
+    {
+      "node_id": 49,
+      "step": 223,
+      "voltage_pu": 1.1726
+    },
+    {
+      "node_id": 50,
+      "step": 223,
+      "voltage_pu": 1.1754
+    },
+    {
+      "node_id": 51,
+      "step": 223,
+      "voltage_pu": 1.1787
+    },
+    {
+      "node_id": 52,
+      "step": 223,
+      "voltage_pu": 1.1819
+    },
+    {
+      "node_id": 53,
+      "step": 223,
+      "voltage_pu": 1.1848
+    },
+    {
+      "node_id": 54,
+      "step": 223,
+      "voltage_pu": 1.1881
+    },
+    {
+      "node_id": 55,
+      "step": 223,
+      "voltage_pu": 1.1916
+    },
+    {
+      "node_id": 56,
+      "step": 223,
+      "voltage_pu": 1.1947
+    },
+    {
+      "node_id": 57,
+      "step": 223,
+      "voltage_pu": 1.1977
+    },
+    {
+      "node_id": 58,
+      "step": 223,
+      "voltage_pu": 1.2006
+    },
+    {
+      "node_id": 59,
+      "step": 223,
+      "voltage_pu": 1.2036
+    },
+    {
+      "node_id": 26,
+      "step": 224,
+      "voltage_pu": 1.1024
+    },
+    {
+      "node_id": 27,
+      "step": 224,
+      "voltage_pu": 1.1055
+    },
+    {
+      "node_id": 28,
+      "step": 224,
+      "voltage_pu": 1.1083
+    },
+    {
+      "node_id": 29,
+      "step": 224,
+      "voltage_pu": 1.111
+    },
+    {
+      "node_id": 30,
+      "step": 224,
+      "voltage_pu": 1.1139
+    },
+    {
+      "node_id": 31,
+      "step": 224,
+      "voltage_pu": 1.1171
+    },
+    {
+      "node_id": 32,
+      "step": 224,
+      "voltage_pu": 1.1199
+    },
+    {
+      "node_id": 33,
+      "step": 224,
+      "voltage_pu": 1.1234
+    },
+    {
+      "node_id": 34,
+      "step": 224,
+      "voltage_pu": 1.1266
+    },
+    {
+      "node_id": 35,
+      "step": 224,
+      "voltage_pu": 1.1299
+    },
+    {
+      "node_id": 36,
+      "step": 224,
+      "voltage_pu": 1.133
+    },
+    {
+      "node_id": 37,
+      "step": 224,
+      "voltage_pu": 1.1359
+    },
+    {
+      "node_id": 38,
+      "step": 224,
+      "voltage_pu": 1.1395
+    },
+    {
+      "node_id": 39,
+      "step": 224,
+      "voltage_pu": 1.1424
+    },
+    {
+      "node_id": 40,
+      "step": 224,
+      "voltage_pu": 1.1453
+    },
+    {
+      "node_id": 41,
+      "step": 224,
+      "voltage_pu": 1.1488
+    },
+    {
+      "node_id": 42,
+      "step": 224,
+      "voltage_pu": 1.1515
+    },
+    {
+      "node_id": 43,
+      "step": 224,
+      "voltage_pu": 1.1546
+    },
+    {
+      "node_id": 44,
+      "step": 224,
+      "voltage_pu": 1.1574
+    },
+    {
+      "node_id": 45,
+      "step": 224,
+      "voltage_pu": 1.1607
+    },
+    {
+      "node_id": 46,
+      "step": 224,
+      "voltage_pu": 1.1642
+    },
+    {
+      "node_id": 47,
+      "step": 224,
+      "voltage_pu": 1.1675
+    },
+    {
+      "node_id": 48,
+      "step": 224,
+      "voltage_pu": 1.1708
+    },
+    {
+      "node_id": 49,
+      "step": 224,
+      "voltage_pu": 1.1734
+    },
+    {
+      "node_id": 50,
+      "step": 224,
+      "voltage_pu": 1.1763
+    },
+    {
+      "node_id": 51,
+      "step": 224,
+      "voltage_pu": 1.1796
+    },
+    {
+      "node_id": 52,
+      "step": 224,
+      "voltage_pu": 1.1828
+    },
+    {
+      "node_id": 53,
+      "step": 224,
+      "voltage_pu": 1.1857
+    },
+    {
+      "node_id": 54,
+      "step": 224,
+      "voltage_pu": 1.1889
+    },
+    {
+      "node_id": 55,
+      "step": 224,
+      "voltage_pu": 1.1924
+    },
+    {
+      "node_id": 56,
+      "step": 224,
+      "voltage_pu": 1.1954
+    },
+    {
+      "node_id": 57,
+      "step": 224,
+      "voltage_pu": 1.1985
+    },
+    {
+      "node_id": 58,
+      "step": 224,
+      "voltage_pu": 1.2014
+    },
+    {
+      "node_id": 59,
+      "step": 224,
+      "voltage_pu": 1.2045
+    }
+  ],
+  "audit_chain": {
+    "forecaster_identified_risk_level": "CRITICAL",
+    "forecaster_peak_synchrony": 1.0,
+    "coordinator_proposed_strategy": "gossip",
+    "coordinator_synchrony_ratio": 0.167,
+    "compliance_finding": "battery_herding_overvoltage_detected",
+    "compliance_action": "escalate_to_operator"
+  }
+}
