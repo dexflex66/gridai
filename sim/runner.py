@@ -219,9 +219,10 @@ def run_all(load_source: str = "synthetic", aemo_profile: np.ndarray = None):
         "secondary_peak_demand_reduction": {
             "_label": (
                 "Battery-window peak demand reduction. SECONDARY metric only. "
-                "Heterogeneous case (3.2%) is the realistic scenario — report this, "
-                "NOT the homogeneous (11.6%) which is a controlled stress test. "
-                "Do NOT inflate or swap for swing in headline."
+                f"Heterogeneous case ({round(pct_het_peak, 1)}%) is the realistic scenario — "
+                f"report this, NOT the homogeneous ({round(pct_h_peak, 1)}%) which is a "
+                "controlled stress test. A negative value means gossip raised the peak "
+                "slightly; report it honestly. Do NOT inflate or swap for swing in headline."
             ),
             "naive_homogeneous_bat_peak_kw": nh_peak,
             "gossip_homogeneous_bat_peak_kw": gh_peak,
