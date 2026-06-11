@@ -76,7 +76,7 @@ def naive_synthetic_result():
 def _run_full_chain(scenario_result, scenario_name, load_source, aemo_profile=None):
     """
     Helper: run the full four-agent chain and return (band, agents, compliance_decision, op_decision).
-    The Coordinator internally re-runs the gossip protocol using the load_source.
+    The Coordinator executes the scenario's own dispatch strategy (naive or gossip).
     """
     band = MockBand()
     forecaster  = ForecasterAgent(band)
@@ -196,6 +196,20 @@ class TestNaiveAEMOChain:
         assert "dispatch_plan" in payload
         assert "voltage_trajectory" in payload
 
+    def test_decision_record_strategy_matches_executed_naive(self):
+        """Regression: the naive run's record must describe the NAIVE plan, not gossip.
+
+        Previously the Coordinator always ran gossip, so a naive run produced a
+        self-contradictory record (strategy=gossip + 471 herding breaches). The
+        record's strategy/synchrony must agree with the breach data it reports.
+        """
+        assert self.compliance_decision["strategy"] == "naive"
+        assert self.compliance_decision["coordinator_synchrony_ratio"] == 1.0
+        # naive dispatch does not converge — no rounds figure
+        assert self.compliance_decision["coordinator_rounds_to_converge"] is None
+        # and it genuinely breached (consistency between label and data)
+        assert self.compliance_decision["herding_overvolt_event_count"] > 0
+
     def test_operator_decision_is_hold_for_large_breach(self):
         # 471 overvolt events -> HOLD (>= 50 threshold in grid_operator.py)
         assert self.op_decision["operator_decision"] == "HOLD"
@@ -223,6 +237,12 @@ class TestGossipAEMOChain:
 
     def test_zero_herding_overvolt_events(self):
         assert self.compliance_decision["herding_overvolt_event_count"] == 0
+
+    def test_decision_record_strategy_matches_executed_gossip(self):
+        """Regression: the gossip run's record must describe the GOSSIP plan, consistently."""
+        assert self.compliance_decision["strategy"] == "gossip"
+        assert self.compliance_decision["coordinator_synchrony_ratio"] < 1.0
+        assert self.compliance_decision["coordinator_rounds_to_converge"] is not None
 
     def test_operator_acknowledges_clean(self):
         assert self.op_decision["operator_decision"] == "ACKNOWLEDGED_CLEAN"

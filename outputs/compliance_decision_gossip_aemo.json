@@ -3,7 +3,7 @@
   "load_source": "aemo",
   "strategy": "gossip",
   "reviewed_by": "compliance",
-  "review_timestamp": "2026-06-11T10:03:06.399229+00:00",
+  "review_timestamp": "2026-06-11T10:13:55.568845+00:00",
   "upstream_band_step": 6,
   "forecaster_risk_level": "LOW",
   "coordinator_rounds_to_converge": 1,

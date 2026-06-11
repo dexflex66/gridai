@@ -2,18 +2,23 @@
 Coordinator agent — execution stage.
 
 Receives the risk_window handoff from Forecaster via Band.
-Runs the gossip-protocol coordination over the battery fleet (Layer 1),
-producing a dispatch plan and the resulting per-node voltage trajectory.
+Executes the dispatch strategy the scenario specifies over the battery fleet
+(Layer 1), producing a dispatch plan and the resulting per-node voltage
+trajectory:
+  - naive run  -> naive price-following dispatch (herding) -> breaches
+  - gossip run -> gossip-protocol coordination            -> flattened, clean
 
 Hands off to Compliance via Band:
-  - current_plan_trajectory: the naive plan's voltage trajectory (from Forecaster context)
-    — this is what would happen without coordination; Compliance reviews THIS for violations
-  - proposed_plan_trajectory: the gossip plan's voltage trajectory (the proposed solution)
-    — included for comparison and future use
-  - dispatch_plan: structured summary of the gossip plan
+  - dispatch_plan: structured summary of the EXECUTED plan (strategy, synchrony,
+    convergence, metrics) — always describes the strategy actually run
+  - voltage_trajectory: the executed plan's own per-node voltage breach events,
+    which Compliance reviews for violations
+
+Because the dispatch_plan and the reviewed trajectory both come from the same
+executed run, the strategy label can never disagree with the breach data.
 
 Real delegation: Coordinator does NOT decide compliance. It executes the
-coordination protocol and passes results downstream for review.
+dispatch strategy and passes results downstream for review.
 """
 
 import numpy as np
@@ -65,33 +70,36 @@ class CoordinatorAgent:
 
     def _handle_risk_window(self, risk_window: dict) -> None:
         """
-        Run gossip coordination and hand off results to Compliance.
+        Execute the scenario's own dispatch strategy and hand off the resulting
+        plan + voltage trajectory to Compliance.
 
-        The 'current plan' trajectory comes from Forecaster's risk context
-        (the naive scenario breach events). Compliance reviews those for violations.
-        The 'proposed plan' trajectory is the gossip run's result.
+        The Coordinator runs the SAME strategy the scenario specifies (naive for
+        the baseline run, gossip for the coordinated run), so dispatch_plan and
+        the reviewed trajectory always describe one and the same executed plan.
         """
         scenario_name = risk_window["scenario_name"]
         load_source   = risk_window["load_source"]
         n_homes       = risk_window["n_homes"]
+        strategy      = risk_window["strategy"]
+        heterogeneous = risk_window["heterogeneous"]
 
-        # --- Run the GOSSIP scenario as the proposed coordination plan ---
+        # --- Execute the scenario's own dispatch strategy ---
         aemo_profile = None
         if load_source == "aemo":
             aemo_profile, _ = load_aemo_profile()
 
-        gossip_result = run_scenario(
-            strategy="gossip",
-            heterogeneous=True,
+        result = run_scenario(
+            strategy=strategy,
+            heterogeneous=heterogeneous,
             n_homes=n_homes,
             rng_seed=42,
             load_source=load_source,
             aemo_profile=aemo_profile,
         )
-        gossip_metrics = compute_metrics(gossip_result)
+        metrics = compute_metrics(result)
 
-        # --- Dispatch plan summary ---
-        dispatch = np.array(gossip_result["dispatch_series"])
+        # --- Dispatch plan summary (reflects the EXECUTED strategy) ---
+        dispatch = np.array(result["dispatch_series"])
         BAT_WIN_START = 204
         BAT_WIN_END   = 260
         bat_dispatch  = dispatch[:, BAT_WIN_START:BAT_WIN_END]
@@ -100,37 +108,25 @@ class CoordinatorAgent:
         dispatch_plan = {
             "scenario_name": scenario_name,
             "load_source": load_source,
-            "strategy": "gossip",
-            "heterogeneous": True,
+            "strategy": strategy,
+            "heterogeneous": heterogeneous,
             "n_homes": n_homes,
-            "rounds_to_converge": gossip_result["rounds_to_converge"],
+            # naive dispatch does not converge, so rounds_to_converge is None there
+            "rounds_to_converge": result.get("rounds_to_converge"),
             "battery_window_simultaneous_discharge": simultaneous.tolist(),
             "peak_simultaneous": int(np.max(simultaneous)),
             "synchrony_ratio": round(float(np.max(simultaneous)) / n_homes, 3),
-            "metrics": gossip_metrics,
+            "metrics": metrics,
         }
 
-        # --- Current plan trajectory: the naive plan's breach events ---
-        # These come from the Forecaster's risk context.
-        # Compliance reviews these to detect battery_herding overvoltage violations.
-        current_plan_breach_events = risk_window.get("current_plan_breach_events", [])
-
-        current_plan_trajectory = {
-            "strategy": risk_window["strategy"],     # "naive" or "gossip"
-            "voltage_breach_events": current_plan_breach_events,
-            "bat_overvolt_steps": _count_by_cause_dir(current_plan_breach_events, "battery_herding", "upper"),
-            "bat_undervolt_steps": _count_by_cause_dir(current_plan_breach_events, "battery_herding", "lower"),
-            "pv_overvolt_steps": _count_by_cause_dir(current_plan_breach_events, "pv_export", "upper"),
-        }
-
-        # --- Proposed plan trajectory: gossip result ---
-        voltage_series = np.array(gossip_result["voltage_series"])
-        proposed_plan_trajectory = {
-            "strategy": "gossip",
-            "voltage_series": voltage_series.tolist(),
-            "voltage_breach_events": gossip_result["voltage_breach_events"],
-            "bat_overvolt_steps": gossip_metrics["bat_overvolt_steps"],
-            "bat_undervolt_steps": gossip_metrics["bat_undervolt_steps"],
+        # --- Voltage trajectory under the executed plan (what Compliance reviews) ---
+        breach_events = result["voltage_breach_events"]
+        voltage_trajectory = {
+            "strategy": strategy,
+            "voltage_breach_events": breach_events,
+            "bat_overvolt_steps": _count_by_cause_dir(breach_events, "battery_herding", "upper"),
+            "bat_undervolt_steps": _count_by_cause_dir(breach_events, "battery_herding", "lower"),
+            "pv_overvolt_steps": _count_by_cause_dir(breach_events, "pv_export", "upper"),
         }
 
         self._band.handoff(
@@ -140,10 +136,8 @@ class CoordinatorAgent:
             payload={
                 "risk_window": risk_window,
                 "dispatch_plan": dispatch_plan,
-                # current_plan = what is being reviewed for compliance violations
-                "voltage_trajectory": current_plan_trajectory,
-                # proposed_plan = gossip solution (for reference / future review)
-                "proposed_plan_trajectory": proposed_plan_trajectory,
+                # the executed plan's own trajectory — what Compliance reviews
+                "voltage_trajectory": voltage_trajectory,
             },
         )
 

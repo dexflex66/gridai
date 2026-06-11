@@ -26,14 +26,17 @@ _Nothing in progress._
 - `agents/band_interface.py`: abstract BandInterface (register, discover, send, broadcast, handoff, subscribe, drain, audit_log)
 - `agents/mock_band.py`: MockBand — in-process synchronous implementation; append-only audit log with step/timestamp/sender/recipient/message_type/payload
 - `agents/forecaster.py`: ForecasterAgent — analyses naive scenario, identifies evening battery-herding risk window, hands off structured risk_window context to Coordinator
-- `agents/coordinator.py`: CoordinatorAgent — receives risk_window, runs gossip coordination (Layer 1), hands off current plan trajectory + proposed gossip plan to Compliance
+- `agents/coordinator.py`: CoordinatorAgent — receives risk_window, executes the scenario's OWN dispatch strategy (naive for baseline run, gossip for coordinated run) via Layer 1, hands off the executed plan + its own voltage trajectory to Compliance. dispatch_plan and reviewed trajectory always come from the same run, so strategy label and breach data can never disagree.
 - `agents/compliance.py`: ComplianceAgent — reviews voltage trajectory for battery_herding OVERVOLTAGE breaches; ignores pv_export; escalates to Operator or approves; writes audit trail entries
 - `agents/grid_operator.py`: OperatorAgent — receives escalations/approvals, records governance decision (HOLD/REQUEST_REPLAN/APPROVE_WITH_CAVEAT/ACKNOWLEDGED_CLEAN), broadcasts final decision
 - `agents/run_agents.py`: full chain runner for both naive and gossip AEMO scenarios; emits band_audit_*.json and compliance_decision_*.json to outputs/
 - `agents/BAND_INTEGRATION.md`: swap-seam doc; interface→SDK mapping; open questions
-- `tests/test_agents.py`: 34 tests all passing
-- **Total: 70 tests, 70 passed, 0 failed**
+- `tests/test_agents.py`: 36 tests all passing (incl. 2 regression guards that the decision record's strategy/synchrony match the executed scenario)
+- **Total: 72 tests, 72 passed, 0 failed**
 - Day 3 git commit: (see below after commit)
+
+### Day 3 fix (provenance bug)
+- Earlier Day 3 build had the Coordinator ALWAYS run gossip, then label the naive run's decision record with strategy=gossip + synchrony 0.167 while reporting 471 naive breaches — internally self-contradictory and a Q&A liability. Fixed: Coordinator now runs the scenario's own strategy; records are consistent (naive: strategy=naive, synchrony=1.0, rounds=null, 471→ESCALATE | gossip: strategy=gossip, synchrony=0.167, rounds=1, 0→APPROVED). Guarded by regression tests.
 
 ### Hero demo numbers (AEMO-driven, confirmed)
 

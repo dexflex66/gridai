@@ -102,6 +102,7 @@ class ForecasterAgent:
             "scenario_name": scenario_name,
             "load_source": load_source,
             "strategy": scenario_result["strategy"],
+            "heterogeneous": scenario_result["heterogeneous"],
             "n_homes": n_homes,
             "battery_window": {
                 "start_step": BAT_WIN_START,

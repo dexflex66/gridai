@@ -1,13 +1,13 @@
 {
   "scenario_name": "naive_homogeneous",
   "load_source": "aemo",
-  "strategy": "gossip",
+  "strategy": "naive",
   "reviewed_by": "compliance",
-  "review_timestamp": "2026-06-11T10:03:06.265261+00:00",
+  "review_timestamp": "2026-06-11T10:13:55.439678+00:00",
   "upstream_band_step": 6,
   "forecaster_risk_level": "CRITICAL",
-  "coordinator_rounds_to_converge": 1,
-  "coordinator_synchrony_ratio": 0.167,
+  "coordinator_rounds_to_converge": null,
+  "coordinator_synchrony_ratio": 1.0,
   "total_breach_events": 1178,
   "herding_overvolt_event_count": 471,
   "herding_undervolt_event_count": 516,
@@ -2422,8 +2422,8 @@
   "audit_chain": {
     "forecaster_identified_risk_level": "CRITICAL",
     "forecaster_peak_synchrony": 1.0,
-    "coordinator_proposed_strategy": "gossip",
-    "coordinator_synchrony_ratio": 0.167,
+    "coordinator_proposed_strategy": "naive",
+    "coordinator_synchrony_ratio": 1.0,
     "compliance_finding": "battery_herding_overvoltage_detected",
     "compliance_action": "escalate_to_operator"
   }
