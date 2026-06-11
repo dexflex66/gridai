@@ -114,7 +114,8 @@ def price_signal() -> np.ndarray:
     return signal
 
 
-def make_homes(n_homes: int, heterogeneous: bool, rng_seed: int = 42) -> list:
+def make_homes(n_homes: int, heterogeneous: bool, rng_seed: int = 42,
+               aemo_profile: np.ndarray = None) -> list:
     """
     Create a list of home parameter dicts.
 
@@ -127,6 +128,10 @@ def make_homes(n_homes: int, heterogeneous: bool, rng_seed: int = 42) -> list:
       battery_capacity_kwh, battery_max_rate_kw,
       soc_initial, willingness_threshold,
       soc_min, soc_max, efficiency
+
+    aemo_profile: optional 288-element array of mean per-home base load kW.
+      When provided, replaces the synthetic base_load_profile() for each home
+      (with per-home scaling noise applied on top).
     """
     rng = np.random.RandomState(rng_seed)
     homes = []
@@ -144,11 +149,21 @@ def make_homes(n_homes: int, heterogeneous: bool, rng_seed: int = 42) -> list:
             threshold = PRICE_THRESHOLD_DEFAULT
             soc_init = 0.70
 
+        if aemo_profile is not None:
+            # Use real AEMO shape with per-home scaling (+/-20%) and small noise.
+            # This preserves the real evening-peak shape while giving each home
+            # its own character, just as the synthetic profiles do.
+            scale = rng.uniform(0.8, 1.2)
+            noise = rng.uniform(-0.05, 0.05, N_STEPS)
+            bl = np.clip(aemo_profile * scale + noise, 0.1, 5.0)
+        else:
+            bl = base_load_profile(seed=i)
+
         home = {
             "id": i,
             "position": i,  # 0 = nearest to transformer
             "has_pv": has_pv,
-            "base_load": base_load_profile(seed=i),
+            "base_load": bl,
             "pv_gen": pv_profile(seed=i, has_pv=has_pv),
             "battery_capacity_kwh": BATTERY_CAPACITY_KWH,
             "battery_max_rate_kw": BATTERY_MAX_RATE_KW,

@@ -129,20 +129,30 @@ def run_scenario(
     heterogeneous: bool,
     n_homes: int = N_HOMES_DEFAULT,
     rng_seed: int = 42,
+    load_source: str = "synthetic",
+    aemo_profile: np.ndarray = None,
 ) -> dict:
     """
     Run a complete scenario end-to-end.
 
     strategy: "naive" or "gossip"
     heterogeneous: True = varied thresholds/SOC, False = identical
+    load_source: "synthetic" | "aemo" — which base-load profile to use
+    aemo_profile: 288-element array (required when load_source="aemo")
 
     Returns result dict augmented with:
       strategy, heterogeneous, n_homes,
       rounds_to_converge (gossip only, else None),
       gossip_log (gossip only, else []),
-      homes_meta: list of per-home parameters (no numpy arrays, for JSON)
+      homes_meta: list of per-home parameters (no numpy arrays, for JSON),
+      voltage_breach_events: list of per-event dicts with cause labels
     """
-    homes = make_homes(n_homes, heterogeneous=heterogeneous, rng_seed=rng_seed)
+    homes = make_homes(
+        n_homes,
+        heterogeneous=heterogeneous,
+        rng_seed=rng_seed,
+        aemo_profile=aemo_profile,
+    )
     price = price_signal()
 
     rounds_to_converge = None
@@ -163,6 +173,41 @@ def run_scenario(
     result["n_homes"] = n_homes
     result["rounds_to_converge"] = rounds_to_converge
     result["gossip_log"] = gossip_log
+
+    # Per-breach-event detail with cause labels.
+    # PV window: steps 120-180 (10:00-15:00) -> cause "pv_export"
+    # Battery window: steps 204-260 (17:00-21:40) -> cause "battery_herding"
+    # Other: cause "other"
+    PV_WIN_START  = 120
+    PV_WIN_END    = 180
+    BAT_WIN_START = 204
+    BAT_WIN_END   = 260
+    voltage_breach_events = []
+    vv = result["voltage_violations"]  # (N, N_STEPS) bool
+    vs = result["voltage_series"]       # (N, N_STEPS) float
+    for t in range(N_STEPS):
+        homes_breaching = np.where(vv[:, t])[0]
+        if len(homes_breaching) == 0:
+            continue
+        if PV_WIN_START <= t < PV_WIN_END:
+            cause = "pv_export"
+        elif BAT_WIN_START <= t < BAT_WIN_END:
+            cause = "battery_herding"
+        else:
+            cause = "other"
+        for node_id in homes_breaching:
+            v_val = float(vs[node_id, t])
+            band_exceeded = "upper" if v_val > V_MAX_PU else "lower"
+            voltage_breach_events.append({
+                "step": int(t),
+                "time_hhmm": f"{(t * 5) // 60:02d}:{(t * 5) % 60:02d}",
+                "node_id": int(node_id),
+                "voltage_pu": round(v_val, 4),
+                "band_limit_crossed": band_exceeded,
+                "band_limit_value": V_MAX_PU if band_exceeded == "upper" else V_MIN_PU,
+                "cause": cause,
+            })
+    result["voltage_breach_events"] = voltage_breach_events
 
     # Strip numpy arrays from homes for JSON serialisation
     result["homes_meta"] = [
