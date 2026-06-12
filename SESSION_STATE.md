@@ -124,10 +124,28 @@ step=8  operator    -> ALL          [operator_decision]
 - **Tests: 82 passing** (81 + 1 new regression for the reason wording). Mock remains the
   default for the suite (offline, deterministic); real-Band parity proven via the live run.
 
+## DONE (Day 5 — submission package, verified)
+
+- `viz/NARRATION.md`: 90-second single-take narration mapped to exact demo scrubber steps/views
+  (step 144 / 211, Naive-only / Gossip-only / 3-way), with honest-framing guardrails.
+- `SUBMISSION.md`: structured to the lablab.ai form (title ≤50, short desc ≤255, track, technologies,
+  long description: Problem / Solution / How Band was used / Evidence / What we don't claim / What's next,
+  + deliverables checklist). All numbers verified, nothing inflated.
+- Polish pass on `viz/gridai_demo.html` (regenerated via build_demo.py, re-verified headless):
+  1. Inline SVG data-URI favicon → **0 console errors** (was a favicon 404).
+  2. Each Compliance card now surfaces ONE real Band audit entry verbatim (step 7, compliance→operator,
+     handoff:compliance_escalation / compliance_approval, decision + 471/0 + strategy-accurate reason).
+  3. 3-way labels expanded for non-engineers: "homogeneous fleet (control)" / "heterogeneous fleet (realistic)".
+- Re-verified renders at 12:00 / 17:35 naive / 17:35 gossip; screenshots refreshed in viz/screenshots/.
+- Task 4 (Operator LLM narration via Featherless) SKIPPED by design: no FEATHERLESS_API_KEY in env and the
+  brief marked it optional/skip-if-any-risk. Deterministic Operator record is unchanged; the demo doesn't need it.
+- sim/, agents/, protocol logic UNCHANGED. 82 tests still green.
+
 ## NEXT
 
-- Day 5: polish the demo (resolve the gossip-undervoltage framing per user decision), add the
-  three-way contrast to the main narration, write the submission text, record the 90s video.
+- Record the 90-second demo video (per viz/NARRATION.md) and submit before **June 19, 15:00 UTC**.
+- Remaining lablab deliverables to produce: slide deck (PDF); host viz/gridai_demo.html at a public URL
+  (GitHub Pages / Vercel static) for the "working prototype" link.
 
 ## VERIFIED NUMBERS
 

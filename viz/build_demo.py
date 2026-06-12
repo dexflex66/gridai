@@ -153,28 +153,28 @@ def build_data_bundle():
     # 3-way panel: synchrony and overvolt steps
     threeway = {
         "naive_hom": {
-            "label": "Naive / Homogeneous",
+            "label": "Naive · homogeneous fleet (control)",
             "synchrony": naive_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": naive_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": naive_scenario["metrics"]["bat_overvolt_steps"],
             "peak_demand_kw": naive_scenario["metrics"]["peak_demand_kw"],
         },
         "gossip_hom": {
-            "label": "Gossip / Homogeneous",
+            "label": "Gossip · homogeneous fleet (control)",
             "synchrony": gossip_hom_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": gossip_hom_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": gossip_hom_scenario["metrics"]["bat_overvolt_steps"],
             "peak_demand_kw": gossip_hom_scenario["metrics"]["peak_demand_kw"],
         },
         "gossip_het": {
-            "label": "Gossip / Heterogeneous",
+            "label": "Gossip · heterogeneous fleet (realistic)",
             "synchrony": gossip_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": gossip_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": gossip_scenario["metrics"]["bat_overvolt_steps"],
             "peak_demand_kw": gossip_scenario["metrics"]["peak_demand_kw"],
         },
         "naive_het": {
-            "label": "Naive / Heterogeneous",
+            "label": "Naive · heterogeneous fleet (realistic)",
             "synchrony": naive_het_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": naive_het_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": naive_het_scenario["metrics"]["bat_overvolt_steps"],
@@ -240,6 +240,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GridAI — Decentralised Grid Intelligence Demo</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%230a0e1a'/><circle cx='8' cy='8' r='4' fill='%23f59e0b'/></svg>">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { background: #0a0e1a; color: #e2e8f0; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
@@ -331,6 +332,12 @@ canvas { display: block; }
 .compliance-summary { padding: 10px 14px; background: #0a0e1a; border-radius: 8px; margin-top: 8px; border: 1px solid #1e293b; font-size: 0.78rem; }
 .compliance-summary .decision { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
 .compliance-summary .reason-text { color: #94a3b8; line-height: 1.5; }
+.audit-entry { font-family: 'Courier New', monospace; font-size: 0.68rem; line-height: 1.4;
+  background: #060912; border: 1px solid #1e293b; border-left: 3px solid #3b82f6; border-radius: 5px;
+  padding: 6px 8px; margin-bottom: 6px; color: #cbd5e1; }
+.audit-entry .ae-label { color: #3b82f6; font-weight: 700; }
+.audit-entry .ae-route { color: #f59e0b; }
+.audit-entry .ae-summary { color: #94a3b8; }
 
 /* Scrollbar styling */
 ::-webkit-scrollbar { width: 4px; }
@@ -458,6 +465,7 @@ canvas { display: block; }
       <div class="audit-log" id="naiveAuditLog"></div>
       <div class="compliance-summary" id="naiveComplianceSummary">
         <div class="decision red">&#9888; ESCALATE</div>
+        <div class="audit-entry" id="naiveAuditEntry"></div>
         <div class="reason-text" id="naiveReason"></div>
       </div>
     </div>
@@ -467,6 +475,7 @@ canvas { display: block; }
       <div class="audit-log" id="gossipAuditLog"></div>
       <div class="compliance-summary" id="gossipComplianceSummary">
         <div class="decision green">&#10003; APPROVED</div>
+        <div class="audit-entry" id="gossipAuditEntry"></div>
         <div class="reason-text" id="gossipReason"></div>
       </div>
     </div>
@@ -1030,6 +1039,22 @@ window.addEventListener('DOMContentLoaded', () => {
   // Populate compliance reasons
   document.getElementById('naiveReason').textContent = DATA.naive.compliance.reason;
   document.getElementById('gossipReason').textContent = DATA.gossip.compliance.reason;
+
+  // Surface ONE real Band audit-trail entry per card (the regulated-workflows artifact):
+  // the compliance decision handoff, verbatim from outputs/band_audit_*.json.
+  function surfaceAuditEntry(elId, audit) {
+    const e = audit.find(a => a.message_type === 'handoff:compliance_escalation'
+                           || a.message_type === 'compliance_approval'
+                           || (a.message_type || '').indexOf('compliance') !== -1)
+           || audit[audit.length - 1];
+    if (!e) return;
+    document.getElementById(elId).innerHTML =
+      `<span class="ae-label">BAND audit · step ${e.step}</span> · ${e.timestamp}<br>`
+      + `<span class="ae-route">${e.sender} → ${e.recipient}</span> · ${e.message_type}<br>`
+      + `<span class="ae-summary">${e.summary}</span>`;
+  }
+  surfaceAuditEntry('naiveAuditEntry', DATA.naive.audit);
+  surfaceAuditEntry('gossipAuditEntry', DATA.gossip.audit);
 
   // Populate audit logs
   renderAuditLog(document.getElementById('naiveAuditLog'), DATA.naive.audit, DATA.naive.compliance.decision);
