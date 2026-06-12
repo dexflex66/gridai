@@ -22,8 +22,9 @@
 - HONEST framing note: at the evening peak the gossip grid shows undervoltage (purple) at far-feeder
   nodes (16 nodes @ step 211; 435 battery_herding UNDERvolt events total) — the documented tradeoff
   of desynchronisation. The headline metric is scoped to OVERvoltage herding (471→0) and the legend
-  distinguishes purple from red, so nothing is inflated. (Open question flagged to user: whether to
-  add an explicit on-screen annotation so the purple isn't misread as the same failure as naive's.)
+  distinguishes purple from red, so nothing is inflated. RESOLVED (user decision): added an explicit
+  honest on-screen annotation under the gossip grid — "herding overvoltage 471 -> 0" plus a note that
+  far-feeder nodes sag to mild undervoltage (a known desync tradeoff, a tuning target, not the herding failure).
 - sim/ and agents/ NOT modified (no new output fields were needed). Tests still 82 (unchanged).
 
 ## DONE (verified)

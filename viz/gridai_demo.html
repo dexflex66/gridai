@@ -66,6 +66,14 @@ canvas { display: block; }
 .audit-entry.approved { border-left: 3px solid #22c55e; background: rgba(34,197,94,0.05); }
 .audit-entry.operator { border-left: 3px solid #f59e0b; background: rgba(245,158,11,0.05); }
 
+/* Honest undervoltage tradeoff note on the gossip panel */
+.tradeoff-note { margin-top: 8px; padding: 8px 10px; background: #0a0e1a; border: 1px solid #1e293b;
+  border-left: 3px solid #a855f7; border-radius: 6px; font-size: 0.72rem; line-height: 1.45; }
+.tradeoff-win { color: #22c55e; font-weight: 700; }
+.tradeoff-sep { color: #475569; margin: 0 6px; }
+.tradeoff-cost { color: #94a3b8; }
+.tradeoff-cost b { color: #c084fc; }
+
 /* 3-way panel */
 .threeway-panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 14px; margin-top: 12px; }
 .threeway-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
@@ -191,6 +199,12 @@ canvas { display: block; }
       </div>
       <canvas id="gossipGrid" width="640" height="240"></canvas>
       <canvas id="gossipVoltage" width="640" height="100" style="margin-top:8px;"></canvas>
+      <div class="tradeoff-note">
+        <span class="tradeoff-win">&#10003; herding overvoltage 471 &rarr; 0</span>
+        <span class="tradeoff-sep">&middot;</span>
+        <span class="tradeoff-cost">honest tradeoff: far-feeder nodes sag to mild
+        <b>undervoltage</b> (purple) &mdash; fewer batteries discharge at once. Known, a tuning target; not the herding failure.</span>
+      </div>
     </div>
   </div>
 
