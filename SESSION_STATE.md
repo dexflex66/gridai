@@ -1,5 +1,31 @@
 # Session State
 
+## DONE (Day 4 — Layer 3 visualisation, verified)
+
+- `viz/build_demo.py`: generator — reads outputs/ JSON, extracts a COMPACT real-data
+  bundle (dispatch as sparse active-home lists, voltage rounded 4dp, demand, battery_herding
+  breach events, compact Band audit, compliance summaries, 3-way numbers) and injects it into
+  `viz/gridai_demo.html` as inline `const DATA` (self-contained, no fetch/CORS, no build at open).
+- `viz/gridai_demo.html`: single self-contained file (~406 KB), pure Canvas + vanilla JS, no CDN.
+  Side-by-side naive/gossip neighbourhood grids (amber=discharge, red=overvolt, purple=undervolt),
+  per-node voltage sparklines, animated aggregate demand curve, dual Band audit-trail panels,
+  compliance ESCALATE/APPROVED cards, 3-way heterogeneity panel, play/pause + speed + scrubber +
+  "Jump to Evening Peak". Toggles: Side-by-side / Naive only / Gossip only.
+- VERIFIED render (headless Chromium via Playwright, screenshots in viz/screenshots/):
+  - 12:00 midday: both grids calm, demand curve drawn to noon — healthy baseline.
+  - 17:35 naive: ALL 60 homes flash amber simultaneously + red breaches ("47 breach", node 37
+    @1.10pu upper) + demand rebound spike + Compliance ESCALATE → Operator HOLD.
+  - 17:35 gossip: staggered sparse amber (desync ripple), 0 overvoltage, Compliance APPROVED.
+  - Only console message is a harmless favicon 404; no JS errors.
+- Data integrity cross-checked against real JSON: naive max-simultaneous=60, gossip=10; naive
+  battery_herding overvolt events=471, gossip=0; synchrony 1.000 vs 0.167.
+- HONEST framing note: at the evening peak the gossip grid shows undervoltage (purple) at far-feeder
+  nodes (16 nodes @ step 211; 435 battery_herding UNDERvolt events total) — the documented tradeoff
+  of desynchronisation. The headline metric is scoped to OVERvoltage herding (471→0) and the legend
+  distinguishes purple from red, so nothing is inflated. (Open question flagged to user: whether to
+  add an explicit on-screen annotation so the purple isn't misread as the same failure as naive's.)
+- sim/ and agents/ NOT modified (no new output fields were needed). Tests still 82 (unchanged).
+
 ## DONE (verified)
 
 - `/Users/mayank/gridai/` repo created, git initialised, initial commit made
@@ -99,9 +125,8 @@ step=8  operator    -> ALL          [operator_decision]
 
 ## NEXT
 
-- Day 4 (Layer 3 visualisation): standalone HTML/Canvas animation playing back the JSON —
-  neighbourhood pulsing sync (naive) then staggered (gossip), aggregate curve split-screen,
-  and the compliance breach moment. Precomputed JSON → standalone HTML (NOT a web app).
+- Day 5: polish the demo (resolve the gossip-undervoltage framing per user decision), add the
+  three-way contrast to the main narration, write the submission text, record the 90s video.
 
 ## VERIFIED NUMBERS
 
