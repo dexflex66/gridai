@@ -131,6 +131,7 @@ def run_scenario(
     rng_seed: int = 42,
     load_source: str = "synthetic",
     aemo_profile: np.ndarray = None,
+    priority_intervals: list = None,
 ) -> dict:
     """
     Run a complete scenario end-to-end.
@@ -162,7 +163,8 @@ def run_scenario(
         schedule = naive_dispatch(homes, price)
     elif strategy == "gossip":
         schedule, rounds_to_converge, gossip_log = gossip_dispatch(
-            homes, price, feeder_impedance=FEEDER_IMPEDANCE_PU
+            homes, price, feeder_impedance=FEEDER_IMPEDANCE_PU,
+            priority_intervals=priority_intervals,
         )
     else:
         raise ValueError(f"Unknown strategy: {strategy}")

@@ -8,3 +8,8 @@ outputs/*.json
 dist/
 build/
 .DS_Store
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example

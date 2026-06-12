@@ -3,7 +3,7 @@
   "load_source": "aemo",
   "strategy": "naive",
   "reviewed_by": "compliance",
-  "review_timestamp": "2026-06-11T10:13:55.439678+00:00",
+  "review_timestamp": "2026-06-12T05:06:56.007701+00:00",
   "upstream_band_step": 6,
   "forecaster_risk_level": "CRITICAL",
   "coordinator_rounds_to_converge": null,
@@ -14,7 +14,7 @@
   "pv_export_event_count": 0,
   "pv_export_flagged_as_protocol_failure": false,
   "compliance_decision": "ESCALATE",
-  "reason": "Battery-herding overvoltage detected: 471 breach events. Gossip coordination did not eliminate all herding spikes. Human operator decision required.",
+  "reason": "Battery-herding overvoltage detected: 471 breach events under the naive dispatch strategy. Naive price-following synchronised the fleet and breached the voltage band. Human operator decision required.",
   "breach_sample": [
     {
       "step": 211,

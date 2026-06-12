@@ -69,3 +69,20 @@ class BandInterface(ABC):
     @abstractmethod
     def audit_log(self) -> list[dict]:
         """Return a copy of the full append-only audit log."""
+
+
+def get_band(use_real: bool | None = None, **kwargs) -> "BandInterface":
+    """Factory: return a RealBand if USE_REAL_BAND is truthy, else a MockBand.
+
+    The four agents depend only on BandInterface and never know which one they got.
+      use_real=None  -> read env var USE_REAL_BAND ("1"/"true"/"yes" => real)
+    Extra kwargs (e.g. base_url, room_id) are passed through to RealBand.
+    """
+    import os
+    if use_real is None:
+        use_real = os.getenv("USE_REAL_BAND", "").strip().lower() in {"1", "true", "yes", "on"}
+    if use_real:
+        from agents.real_band import RealBand
+        return RealBand(**kwargs)
+    from agents.mock_band import MockBand
+    return MockBand()

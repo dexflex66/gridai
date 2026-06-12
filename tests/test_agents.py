@@ -210,6 +210,13 @@ class TestNaiveAEMOChain:
         # and it genuinely breached (consistency between label and data)
         assert self.compliance_decision["herding_overvolt_event_count"] > 0
 
+    def test_naive_escalation_reason_does_not_mention_gossip(self):
+        """Regression: the naive escalation reason must describe naive price-following,
+        not claim 'gossip coordination did not eliminate' on a run with no gossip."""
+        reason = self.compliance_decision["reason"].lower()
+        assert "naive" in reason
+        assert "gossip" not in reason
+
     def test_operator_decision_is_hold_for_large_breach(self):
         # 471 overvolt events -> HOLD (>= 50 threshold in grid_operator.py)
         assert self.op_decision["operator_decision"] == "HOLD"

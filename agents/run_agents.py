@@ -19,7 +19,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from agents.mock_band import MockBand
+from agents.band_interface import get_band
 from agents.forecaster import ForecasterAgent
 from agents.coordinator import CoordinatorAgent
 from agents.compliance import ComplianceAgent
@@ -47,7 +47,9 @@ def run_agent_chain(
     print(f"{'='*60}")
 
     # --- Instantiate fresh Band and agents for this run ---
-    band = MockBand()
+    # get_band() returns RealBand when USE_REAL_BAND is set, else MockBand.
+    # The four agents are identical either way — they depend only on BandInterface.
+    band = get_band()
     forecaster  = ForecasterAgent(band)
     coordinator = CoordinatorAgent(band)
     compliance  = ComplianceAgent(band)

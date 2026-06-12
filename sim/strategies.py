@@ -120,7 +120,8 @@ def _device_hash(agent_id: int) -> int:
 
 
 def gossip_dispatch(homes: list, price: np.ndarray,
-                    feeder_impedance: float = FEEDER_IMPEDANCE_PU) -> tuple:
+                    feeder_impedance: float = FEEDER_IMPEDANCE_PU,
+                    priority_intervals: list | None = None) -> tuple:
     """
     Strategy B: Gossip-based decentralised coordination.
 
@@ -141,6 +142,11 @@ def gossip_dispatch(homes: list, price: np.ndarray,
     """
     N = len(homes)
     dt_h = 5.0 / 60.0
+
+    # Forecaster hint: intervals (steps) it flagged as highest battery-herding
+    # risk. The gossip protocol prefers NOT to re-pile evicted agents onto these
+    # slots. Optional; when absent, behaviour is unchanged.
+    avoid_slots = {int(s) for s in (priority_intervals or [])}
 
     # Phase 1: initial slot assignment
     priority_scores = np.array([_priority_score(h) for h in homes])
@@ -202,7 +208,8 @@ def gossip_dispatch(homes: list, price: np.ndarray,
             # I should yield. Find a better slot.
             old_slot = my_slot
             new_slot = _find_least_crowded_slot(
-                my_slot, slot_counts, DISPATCH_WINDOW_START, DISPATCH_WINDOW_END
+                my_slot, slot_counts, DISPATCH_WINDOW_START, DISPATCH_WINDOW_END,
+                avoid_slots=avoid_slots,
             )
 
             if new_slot != old_slot:
@@ -239,23 +246,31 @@ def gossip_dispatch(homes: list, price: np.ndarray,
 
 
 def _find_least_crowded_slot(current_slot: int, slot_counts: dict,
-                              window_start: int, window_end: int) -> int:
+                              window_start: int, window_end: int,
+                              avoid_slots: set | None = None) -> int:
     """
     Find the slot in [window_start, window_end) with lowest occupancy.
     Excludes current_slot. Prefers slots below MAX_CONCURRENT_DISCHARGE.
-    Among equal-count slots, prefers closest to current_slot.
+    Among equal-count slots, prefers ones the Forecaster did NOT flag as
+    high-herding-risk (avoid_slots), then the closest to current_slot.
+
+    avoid_slots defaults to empty -> behaviour identical to before, so the
+    headline numbers for an un-hinted gossip run are unchanged.
     """
+    avoid = avoid_slots or set()
     best_slot = current_slot
     best_count = slot_counts.get(current_slot, 0)
+    best_avoid = 1 if current_slot in avoid else 0
 
     for s in range(window_start, window_end):
         if s == current_slot:
             continue
         count = slot_counts.get(s, 0)
-        dist = abs(s - current_slot)
-        # Prefer lower count, break ties by proximity
-        if count < best_count or (count == best_count and dist < abs(best_slot - current_slot)):
-            best_count = count
-            best_slot = s
+        s_avoid = 1 if s in avoid else 0
+        # Rank candidates by (occupancy asc, in-avoid-set asc, distance asc).
+        cand = (count, s_avoid, abs(s - current_slot))
+        best = (best_count, best_avoid, abs(best_slot - current_slot))
+        if cand < best:
+            best_count, best_avoid, best_slot = count, s_avoid, s
 
     return best_slot

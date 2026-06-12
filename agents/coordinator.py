@@ -83,6 +83,14 @@ class CoordinatorAgent:
         strategy      = risk_window["strategy"]
         heterogeneous = risk_window["heterogeneous"]
 
+        # Consume the Forecaster's analysis: the intervals it flagged as highest
+        # battery-herding risk become the slots the gossip protocol preferentially
+        # steers dispatch away from. This makes the Forecaster->Coordinator handoff
+        # causal (it changes how the protocol coordinates), not just informational.
+        priority_intervals = [
+            iv["step"] for iv in risk_window.get("high_synchrony_intervals", [])
+        ]
+
         # --- Execute the scenario's own dispatch strategy ---
         aemo_profile = None
         if load_source == "aemo":
@@ -95,6 +103,7 @@ class CoordinatorAgent:
             rng_seed=42,
             load_source=load_source,
             aemo_profile=aemo_profile,
+            priority_intervals=priority_intervals,
         )
         metrics = compute_metrics(result)
 

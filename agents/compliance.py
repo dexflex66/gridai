@@ -134,9 +134,15 @@ class ComplianceAgent:
             "compliance_decision": "ESCALATE",
             "reason": (
                 f"Battery-herding overvoltage detected: "
-                f"{len(herding_overvolt_events)} breach events. "
-                f"Gossip coordination did not eliminate all herding spikes. "
-                f"Human operator decision required."
+                f"{len(herding_overvolt_events)} breach events under the "
+                f"{decision_context.get('strategy', 'unknown')} dispatch strategy. "
+                + (
+                    "Naive price-following synchronised the fleet and breached the "
+                    "voltage band. "
+                    if decision_context.get("strategy") == "naive"
+                    else "Coordination did not eliminate all herding spikes. "
+                )
+                + "Human operator decision required."
             ),
             "breach_sample": sample_breaches,
             "all_herding_overvolt_node_steps": [
@@ -168,9 +174,15 @@ class ComplianceAgent:
             **decision_context,
             "compliance_decision": "APPROVED",
             "reason": (
-                "Zero battery-herding overvoltage breaches detected. "
-                "Gossip coordination successfully eliminated herding spikes. "
-                "Dispatch plan approved."
+                "Zero battery-herding overvoltage breaches detected under the "
+                f"{decision_context.get('strategy', 'unknown')} dispatch strategy. "
+                + (
+                    "Gossip coordination successfully desynchronised the fleet and "
+                    "kept every node within the voltage band. "
+                    if decision_context.get("strategy") == "gossip"
+                    else "Dispatch stayed within the voltage band. "
+                )
+                + "Dispatch plan approved."
             ),
             "audit_chain": {
                 "forecaster_identified_risk_level": decision_context.get("forecaster_risk_level"),

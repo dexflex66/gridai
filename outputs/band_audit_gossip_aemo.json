@@ -1,7 +1,7 @@
 [
   {
     "step": 1,
-    "timestamp": "2026-06-11T10:13:55.448919+00:00",
+    "timestamp": "2026-06-12T05:06:56.025935+00:00",
     "sender": "forecaster",
     "recipient": "BAND",
     "message_type": "register",
@@ -16,7 +16,7 @@
   },
   {
     "step": 2,
-    "timestamp": "2026-06-11T10:13:55.448921+00:00",
+    "timestamp": "2026-06-12T05:06:56.025951+00:00",
     "sender": "coordinator",
     "recipient": "BAND",
     "message_type": "register",
@@ -31,7 +31,7 @@
   },
   {
     "step": 3,
-    "timestamp": "2026-06-11T10:13:55.448924+00:00",
+    "timestamp": "2026-06-12T05:06:56.025959+00:00",
     "sender": "compliance",
     "recipient": "BAND",
     "message_type": "register",
@@ -47,7 +47,7 @@
   },
   {
     "step": 4,
-    "timestamp": "2026-06-11T10:13:55.448926+00:00",
+    "timestamp": "2026-06-12T05:06:56.025963+00:00",
     "sender": "operator",
     "recipient": "BAND",
     "message_type": "register",
@@ -62,7 +62,7 @@
   },
   {
     "step": 5,
-    "timestamp": "2026-06-11T10:13:55.467738+00:00",
+    "timestamp": "2026-06-12T05:06:56.064895+00:00",
     "sender": "forecaster",
     "recipient": "coordinator",
     "message_type": "handoff:risk_window",
@@ -5944,7 +5944,7 @@
   },
   {
     "step": 6,
-    "timestamp": "2026-06-11T10:13:55.561100+00:00",
+    "timestamp": "2026-06-12T05:06:56.249837+00:00",
     "sender": "coordinator",
     "recipient": "compliance",
     "message_type": "handoff:dispatch_plan_and_trajectory",
@@ -17775,7 +17775,7 @@
   },
   {
     "step": 7,
-    "timestamp": "2026-06-11T10:13:55.568851+00:00",
+    "timestamp": "2026-06-12T05:06:56.265172+00:00",
     "sender": "compliance",
     "recipient": "operator",
     "message_type": "compliance_approval",
@@ -17784,7 +17784,7 @@
       "load_source": "aemo",
       "strategy": "gossip",
       "reviewed_by": "compliance",
-      "review_timestamp": "2026-06-11T10:13:55.568845+00:00",
+      "review_timestamp": "2026-06-12T05:06:56.265145+00:00",
       "upstream_band_step": 6,
       "forecaster_risk_level": "LOW",
       "coordinator_rounds_to_converge": 1,
@@ -17795,7 +17795,7 @@
       "pv_export_event_count": 0,
       "pv_export_flagged_as_protocol_failure": false,
       "compliance_decision": "APPROVED",
-      "reason": "Zero battery-herding overvoltage breaches detected. Gossip coordination successfully eliminated herding spikes. Dispatch plan approved.",
+      "reason": "Zero battery-herding overvoltage breaches detected under the gossip dispatch strategy. Gossip coordination successfully desynchronised the fleet and kept every node within the voltage band. Dispatch plan approved.",
       "audit_chain": {
         "forecaster_identified_risk_level": "LOW",
         "coordinator_proposed_strategy": "gossip",
@@ -17807,7 +17807,7 @@
   },
   {
     "step": 8,
-    "timestamp": "2026-06-11T10:13:55.568903+00:00",
+    "timestamp": "2026-06-12T05:06:56.265301+00:00",
     "sender": "operator",
     "recipient": "ALL",
     "message_type": "operator_decision",
@@ -17817,7 +17817,7 @@
       "load_source": "aemo",
       "compliance_finding": "no_battery_herding_overvoltage",
       "herding_overvolt_event_count": 0,
-      "compliance_reason": "Zero battery-herding overvoltage breaches detected. Gossip coordination successfully eliminated herding spikes. Dispatch plan approved.",
+      "compliance_reason": "Zero battery-herding overvoltage breaches detected under the gossip dispatch strategy. Gossip coordination successfully desynchronised the fleet and kept every node within the voltage band. Dispatch plan approved.",
       "audit_chain": {
         "forecaster_identified_risk_level": "LOW",
         "coordinator_proposed_strategy": "gossip",

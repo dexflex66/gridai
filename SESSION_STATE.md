@@ -64,10 +64,44 @@ step=7  compliance  -> operator     [handoff:compliance_escalation]
 step=8  operator    -> ALL          [operator_decision]
 ```
 
+## DONE (Day 3 — Band swap, verified)
+
+- Real Band SDK integrated as a TRANSPORT BUS behind the unchanged BandInterface:
+  - `agents/real_band.py`: RealBand — authenticates each agent with its own Band API
+    key, creates one shared coordination room and adds the 4 agents as participants,
+    routes handoffs as @mention chat messages carrying a JSON envelope, drains each
+    agent's inbox (get_next → processing → processed), mirrors a local audit log and
+    exposes Band's native trail via native_trail().
+  - `agents/band_interface.py`: + get_band() factory (USE_REAL_BAND flag). The abstract
+    interface itself is UNCHANGED. The four agents are UNCHANGED.
+  - `agents/run_agents.py`: uses get_band() so the same runner drives mock or real.
+- Platform facts learned (live): base URL `https://app.band.ai`; package `band-sdk`
+  (import `band` / `thenvoi_rest`); room `task_id` must be a UUID (no string room names);
+  empty inbox returns HTTP 204 (raised as ApiError); message lifecycle is
+  pending→processing→processed (skipping processing is a 422); @mention isolation means
+  each agent only sees messages it sent-to or was-mentioned-in (full chain lives in our
+  audit_log mirror / Human API, not any single agent's view).
+- LIVE PARITY VERIFIED (outputs/band_parity_report.md): full 4-agent chain run over real
+  Band for both scenarios; all 8 compared fields identical to the MockBand records:
+  - naive  → strategy=naive,  synchrony=1.0,   herding_overvolt=471, ESCALATE → Operator HOLD
+  - gossip → strategy=gossip, synchrony=0.167, herding_overvolt=0,   APPROVED → ACKNOWLEDGED_CLEAN
+  Numbers come from the LOCAL sim; Band is a pipe, so parity is exact.
+- Real keys live in `.env` (git-ignored, never committed); `.env.example` documents the keys.
+- Two known issues from the coherence report RESOLVED:
+  1. Compliance escalation/approval reason text is now strategy-accurate (naive no longer
+     claims "gossip coordination did not eliminate..."). Guarded by a regression test.
+  2. Coordinator now CONSUMES the Forecaster's high_synchrony_intervals: they are passed as
+     `priority_intervals` into the gossip protocol (slot-eviction tiebreak steers dispatch
+     away from flagged high-risk intervals). Default off → existing numbers unchanged;
+     verified the agent-chain gossip headline numbers held (synchrony 0.167, 0 overvolt).
+- **Tests: 82 passing** (81 + 1 new regression for the reason wording). Mock remains the
+  default for the suite (offline, deterministic); real-Band parity proven via the live run.
+
 ## NEXT
 
-- Post-kickoff: swap MockBand for real Band client behind band_interface.py; then Layer 3 visualisation
-- Layer 3: standalone HTML/Canvas animation playing back JSON: neighbourhood pulsing sync then staggered, aggregate curve split-screen, compliance breach moment
+- Day 4 (Layer 3 visualisation): standalone HTML/Canvas animation playing back the JSON —
+  neighbourhood pulsing sync (naive) then staggered (gossip), aggregate curve split-screen,
+  and the compliance breach moment. Precomputed JSON → standalone HTML (NOT a web app).
 
 ## VERIFIED NUMBERS
 
@@ -144,6 +178,7 @@ Modest, honest values. Heterogeneous = realistic case. NEVER inflate or swap for
 - Battery-window undervoltage (22–27 steps) exists in ALL gossip scenarios because staggered discharge means fewer batteries helping at any given moment. This is physically correct. The key story is OVERVOLTAGE elimination (the herding spike), not undervoltage. Breach-cause separation correctly labels these as "battery_herding" band_limit_crossed="lower" — distinct from the overvoltage problem.
 - PV export overvoltage (midday): ~55 steps in all synthetic scenarios — same for all strategies, a separate problem (smart inverter territory), cause="pv_export" in breach_events.
 - AEMO-driven gossip_het shows slightly higher bat_peak_demand (121.3 kW) vs naive_het (120.2 kW) — the -0.9% is a load-shape artefact, not a regression. The voltage story is intact.
+- Band real-platform behaviours (not bugs, but constraints): rooms can't be given string names (task_id is a UUID); no single agent sees the whole handoff chain via the agent API (@mention isolation) — use the audit_log mirror or Human API; live chain runs ~6s/scenario over the network vs instant on mock. The 82-test suite runs on MockBand by design (offline/deterministic); running the whole suite against live Band would create a room per test and add network non-determinism — not worth it. Real-Band correctness is proven by the live parity run instead.
 
 ## DO NOT
 
@@ -156,3 +191,6 @@ Modest, honest values. Heterogeneous = realistic case. NEVER inflate or swap for
 - Do not lead any metric with swing/range; voltage-violation elimination and synchrony collapse are the headline, peak reduction is secondary and reported at its real modest value
 - Do not report the homogeneous stress-test peak reduction (11.6%) as the headline; the heterogeneous realistic case (3.2%) is the honest number
 - Do not confuse pv_export and battery_herding breach causes; they are physically distinct phenomena; Compliance agent catches battery_herding overvoltage specifically
+- Do not commit `.env` (real Band API keys); it is git-ignored. Never print key values to logs/terminal — reference by env-var name only
+- Do not change the BandInterface abstract class or the four agents to make real Band work; only the implementation behind the interface (RealBand) and the get_band() factory may change. Real Band is a transport bus, NOT an LLM-agent rewrite (we have no LLM provider keys and our agents are deterministic compute)
+- Do not run the full pytest suite against live Band (USE_REAL_BAND); it is mock-by-design. Prove real-Band behaviour with scripts/verify_band_parity.py instead
