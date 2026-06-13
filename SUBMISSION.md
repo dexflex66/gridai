@@ -87,8 +87,8 @@ showing: **RAISE Summit, Paris, July 4–5**.
 ---
 
 ## Required deliverables (lablab)
-- **Working prototype (URL):** open `viz/gridai_demo.html` — single self-contained file, no server, no
-  build; runs offline in any browser. (Host on GitHub Pages / Vercel static for the public URL.)
+- **Working prototype (URL):** https://dexflex66.github.io/gridai/ — single self-contained file, no server,
+  no build; runs offline in any browser. Hosted on GitHub Pages.
 - **Pitch video (≤ 5 min, MP4):** record per `viz/NARRATION.md` (90s single take over the demo).
 - **Slide deck (PDF):** _to produce Day 5–6._
 - **Public GitHub repo:** this repository.

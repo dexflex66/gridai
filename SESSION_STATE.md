@@ -141,11 +141,17 @@ step=8  operator    -> ALL          [operator_decision]
   brief marked it optional/skip-if-any-risk. Deterministic Operator record is unchanged; the demo doesn't need it.
 - sim/, agents/, protocol logic UNCHANGED. 82 tests still green.
 
+## DONE (Day 5 — GitHub Pages deployment, verified)
+
+- GitHub repo: https://github.com/dexflex66/gridai
+- GitHub Pages deployed at: **https://dexflex66.github.io/gridai/** (docs/index.html = viz/gridai_demo.html)
+- Verified live: HTTP 200, loads correctly
+- 82 tests still green (unchanged)
+
 ## NEXT
 
 - Record the 90-second demo video (per viz/NARRATION.md) and submit before **June 19, 15:00 UTC**.
-- Remaining lablab deliverables to produce: slide deck (PDF); host viz/gridai_demo.html at a public URL
-  (GitHub Pages / Vercel static) for the "working prototype" link.
+- Remaining lablab deliverables: slide deck (PDF).
 
 ## VERIFIED NUMBERS
 
