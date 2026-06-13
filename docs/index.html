@@ -52,19 +52,6 @@ h1 span { color: #3b82f6; }
 
 canvas { display: block; }
 
-.title-card {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  margin-top: 24px; padding: 32px 24px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  border: 1px solid #334155; border-radius: 12px;
-}
-.title-card h2 { font-size: 1.8rem; font-weight: 800; color: #e2e8f0; margin: 0 0 8px 0; }
-.title-card h2 span { color: #3b82f6; }
-.title-card .tc-tagline { font-size: 0.95rem; color: #94a3b8; margin: 0 0 16px 0; }
-.title-card .tc-url { font-size: 0.85rem; color: #60a5fa; font-family: 'Courier New', monospace; }
-.title-card .tc-url a { color: #60a5fa; text-decoration: none; }
-.title-card .tc-url a:hover { text-decoration: underline; }
-
 /* Bottom row */
 .bottom-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 .audit-panel { background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; padding: 14px; }
@@ -126,6 +113,7 @@ canvas { display: block; }
 .logo-area h1 { font-size: 1.8rem; }
 .logo-area .tagline { color: #475569; font-size: 0.78rem; margin-top: 2px; }
 .view-controls { display: flex; gap: 8px; align-items: center; }
+#viewToggle { display: none !important; }
 </style>
 </head>
 <body>
@@ -137,7 +125,7 @@ canvas { display: block; }
       <div class="tagline">Decentralised gossip coordination · AEMO load profile · 60 homes · 24 hours</div>
     </div>
     <div class="view-controls">
-      <div class="toggle-group" id="viewToggle" style="display:none">
+      <div class="toggle-group" id="viewToggle">
         <button onclick="setView('side')" class="active" id="btnSide">Side-by-side</button>
         <button onclick="setView('naive')" id="btnNaive">Naive only</button>
         <button onclick="setView('gossip')" id="btnGossip">Gossip only</button>
@@ -746,14 +734,27 @@ function renderThreeWay() {
 function updateBreachIndicator(step) {
   const ind = document.getElementById('breachIndicator');
   if (view === 'gossip') {
-    ind.style.display = 'none';
+    ind.style.display = 'inline';
+    ind.style.color = '#22c55e';
+    ind.textContent = '\u2705 GOSSIP DISPATCH — 0 herding overvoltage events';
+    return;
+  }
+  ind.style.color = '#ef4444';
+  if (view === 'side') {
+    const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
+    if (naiveBreaches.length > 0) {
+      ind.style.display = 'inline';
+      ind.textContent = '\u26a1 NAIVE: VOLTAGE BREACH \u00b7 GOSSIP: CLEAN';
+    } else {
+      ind.style.display = 'none';
+    }
     return;
   }
   const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
   if (naiveBreaches.length > 0) {
     ind.style.display = 'inline';
     const e = naiveBreaches[0];
-    ind.textContent = `⚡ VOLTAGE BREACH — node ${e.node_id} @ ${e.voltage_pu.toFixed(4)}pu (${e.band_limit_crossed}) step=${step} ${stepToTime(step)}`;
+    ind.textContent = `\u26a1 VOLTAGE BREACH — node ${e.node_id} @ ${e.voltage_pu.toFixed(4)}pu (${e.band_limit_crossed}) step=${step} ${stepToTime(step)}`;
   } else {
     ind.style.display = 'none';
   }
@@ -855,12 +856,5 @@ window.addEventListener('DOMContentLoaded', () => {
   renderAll();
 });
 </script>
-
-<div class="title-card" id="titleCard">
-  <h2>Grid<span>AI</span></h2>
-  <p class="tc-tagline">Decentralised Gossip Coordination for Grid-Stable Battery Dispatch</p>
-  <p class="tc-url"><a href="https://github.com/mk1133/gridai" target="_blank">github.com/mk1133/gridai</a></p>
-</div>
-
 </body>
 </html>

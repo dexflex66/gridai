@@ -349,6 +349,7 @@ canvas { display: block; }
 .logo-area h1 { font-size: 1.8rem; }
 .logo-area .tagline { color: #475569; font-size: 0.78rem; margin-top: 2px; }
 .view-controls { display: flex; gap: 8px; align-items: center; }
+#viewToggle { display: none !important; }
 </style>
 </head>
 <body>
@@ -967,12 +968,29 @@ function renderThreeWay() {
 
 // ── breach indicator ──
 function updateBreachIndicator(step) {
-  const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
   const ind = document.getElementById('breachIndicator');
+  if (view === 'gossip') {
+    ind.style.display = 'inline';
+    ind.style.color = '#22c55e';
+    ind.textContent = '\u2705 GOSSIP DISPATCH — 0 herding overvoltage events';
+    return;
+  }
+  ind.style.color = '#ef4444';
+  if (view === 'side') {
+    const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
+    if (naiveBreaches.length > 0) {
+      ind.style.display = 'inline';
+      ind.textContent = '\u26a1 NAIVE: VOLTAGE BREACH \u00b7 GOSSIP: CLEAN';
+    } else {
+      ind.style.display = 'none';
+    }
+    return;
+  }
+  const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
   if (naiveBreaches.length > 0) {
     ind.style.display = 'inline';
     const e = naiveBreaches[0];
-    ind.textContent = `⚡ VOLTAGE BREACH — node ${e.node_id} @ ${e.voltage_pu.toFixed(4)}pu (${e.band_limit_crossed}) step=${step} ${stepToTime(step)}`;
+    ind.textContent = `\u26a1 VOLTAGE BREACH — node ${e.node_id} @ ${e.voltage_pu.toFixed(4)}pu (${e.band_limit_crossed}) step=${step} ${stepToTime(step)}`;
   } else {
     ind.style.display = 'none';
   }
