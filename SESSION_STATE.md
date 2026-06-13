@@ -148,6 +148,17 @@ step=8  operator    -> ALL          [operator_decision]
 - Verified live: HTTP 200, loads correctly
 - 82 tests still green (unchanged)
 
+## DONE (Day 5 — jumpTo fix, verified)
+
+- Fix: viz/gridai_demo.html + viz/build_demo.py `jumpTo(204)` → `jumpTo(211)` (true hero frame).
+  Step 211 is the evening peak (~17:35) where naive shows full 60/60 amber simultaneous discharge
+  with red breach indicators. Step 204 was a dim pre-peak frame.
+- viz/build_demo.py regenerated successfully: all cross-check assertions passed (60/60 naive, 10/60
+  gossip, 471 overvolt, 0 overvolt, synchrony 1.0/0.167, ESCALATE/APPROVED).
+- Playwright audit passed (0 console errors, all screenshots rich content >50KB, hero frame 291.8 KB).
+- Pushed to GitHub Pages (docs/index.html), awaiting deployment (live page still serving cached step 204;
+  expected to flip within ~2 min).
+
 ## NEXT
 
 - Record the 90-second demo video (per viz/NARRATION.md) and submit before **June 19, 15:00 UTC**.

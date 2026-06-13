@@ -407,7 +407,7 @@ canvas { display: block; }
   <!-- Playback controls -->
   <div class="controls">
     <button onclick="togglePlay()" id="playBtn">&#9654; Play</button>
-    <button onclick="jumpTo(204)">&#9654; Jump to Evening Peak</button>
+    <button onclick="jumpTo(211)">&#9654; Jump to Evening Peak</button>
     <button onclick="jumpTo(0)">&#8634; Reset</button>
     <label>Step: <input type="range" id="stepSlider" min="0" max="287" value="0" oninput="onSlider(this.value)"></label>
     <span class="time-display" id="timeDisplay">00:00</span>
