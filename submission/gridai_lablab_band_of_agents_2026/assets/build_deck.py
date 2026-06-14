@@ -44,11 +44,6 @@ def title_bar(slide, text):
     p.font.color.rgb = STEEL
     p.font.name = FONT
 
-    line = slide.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.6), Inches(0.85), Inches(1.2), Inches(0.03))
-    line.fill.solid()
-    line.fill.fore_color.rgb = AMBER
-    line.line.fill.background()
-
 
 def add_body(slide, x, y, w, h, runs, font_size=Pt(14)):
     tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
@@ -57,7 +52,6 @@ def add_body(slide, x, y, w, h, runs, font_size=Pt(14)):
     p = tf.paragraphs[0]
     for run_spec in runs:
         is_break = run_spec.get("break", False)
-        # If this run should start after a break, add a new paragraph
         if is_break and p.text != "":
             p = tf.add_paragraph()
         run = p.add_run()
@@ -69,7 +63,6 @@ def add_body(slide, x, y, w, h, runs, font_size=Pt(14)):
         run.font.name = FONT
         if "bullet" in run_spec:
             p.level = 0
-            # We'll prepend a bullet char
     return tf
 
 
@@ -113,23 +106,7 @@ def add_rect(slide, x, y, w, h, fill_color, line_color=None):
 # ============================================================
 s = new_slide()
 
-screenshot = os.path.join(ASSETS, "07b_side_by_side_TRUE_peak_step211.png")
-if os.path.exists(screenshot):
-    s.shapes.add_picture(screenshot, Inches(5.2), Inches(0), Inches(4.8), Inches(7.5))
-
-# overlay on right side to dim the image
-overlay = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(5.2), Inches(0), Inches(4.8), Inches(7.5))
-overlay.fill.solid()
-overlay.fill.fore_color.rgb = BG
-overlay.fill.fore_color.brightness = 0.5  # doesn't work perfectly, but helps
-overlay.line.fill.background()
-
-add_text_box(s, 0.8, 1.2, 4.5, 0.8, "GridAI", Pt(48), WHITE, True)
-
-line = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.8), Inches(2.1), Inches(0.6), Inches(0.04))
-line.fill.solid()
-line.fill.fore_color.rgb = AMBER
-line.line.fill.background()
+add_text_box(s, 0.8, 1.6, 8.0, 0.9, "GridAI", Pt(48), WHITE, True)
 
 add_text_box(s, 0.8, 2.35, 4.5, 0.5, "Anti-Herding Compliance for Distributed Energy Resources", Pt(18), STEEL)
 add_text_box(s, 0.8, 3.0, 4.5, 0.4, "Four agents on Band  \u00b7  Regulated & High-Stakes Workflows", Pt(13), AMBER)
@@ -248,7 +225,6 @@ gap = 0.25
 for i, (lbl, val, sub, clr) in enumerate(cards):
     cx = 0.6 + i * (cw + gap)
     add_card(s, cx, cy, cw, ch)
-    add_rect(s, cx, cy, cw, 0.04, clr)
     add_text_box(s, cx, cy + 0.12, cw, 0.45, lbl, Pt(10), STEEL, align=PP_ALIGN.CENTER)
     add_text_box(s, cx, cy + 0.55, cw, 0.55, val, Pt(34), clr, True, align=PP_ALIGN.CENTER)
     add_text_box(s, cx, cy + 1.15, cw, 0.45, sub, Pt(9), STEEL, align=PP_ALIGN.CENTER)
@@ -256,10 +232,6 @@ for i, (lbl, val, sub, clr) in enumerate(cards):
 add_text_box(s, 0.6, 4.55, 8.8, 0.35,
     "Heterogeneous fleet synchrony is ~55% lower than homogeneous. Market incentives shape the outcome.",
     Pt(12), STEEL, italic=True)
-
-img = os.path.join(ASSETS, "08_threeway_contrast.png")
-if os.path.exists(img):
-    s.shapes.add_picture(img, Inches(8.5), Inches(4.9), Inches(1.5), Inches(0.7))
 
 # ============================================================
 # SLIDE 5 — The Solution
@@ -277,8 +249,8 @@ bullets = [
 ]
 ty = 2.0
 for bl, sz, clr in bullets:
-    add_text_box(s, 0.8, ty, 5.0, 0.35, "\u2022  " + bl, sz, clr)
-    ty += 0.35
+    add_text_box(s, 0.8, ty, 5.0, 0.5, "\u2022  " + bl, sz, clr)
+    ty += 0.55
 
 ty += 0.2
 add_text_box(s, 0.6, ty, 5.0, 0.35, "Battery-herding overvoltage:", Pt(14), WHITE, True)
@@ -320,7 +292,6 @@ gap = 0.3
 for i, (name, role, color) in enumerate(agents):
     ax = sx + i * (bw + gap)
     add_card(s, ax, sy, bw, bh)
-    add_rect(s, ax, sy, bw, 0.04, color)
     add_text_box(s, ax, sy + 0.12, bw, 0.35, name, Pt(11), color, True, align=PP_ALIGN.CENTER)
     add_text_box(s, ax + 0.1, sy + 0.55, bw - 0.2, 0.8, role, Pt(9), STEEL)
 
@@ -381,10 +352,6 @@ add_text_box(s, 0.7, 4.25, 8.6, 0.3,
     "AEMO 2012 Victorian data, 17,568 rows. Representative day: 2012-01-24 (highest evening peak, 8,864 MW).",
     Pt(10), STEEL, italic=True)
 
-img = os.path.join(ASSETS, "07_side_by_side_peak.png")
-if os.path.exists(img):
-    s.shapes.add_picture(img, Inches(6.0), Inches(4.7), Inches(4.0), Inches(0.9))
-
 # ============================================================
 # SLIDE 8 — The Compliance Artifact
 # ============================================================
@@ -412,12 +379,7 @@ trace = [
 for i, item in enumerate(trace):
     add_text_box(s, 6.1, 2.3 + i * 0.32, 3.5, 0.28, "\u2022  " + item, Pt(11), WHITE)
 
-line = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(5.9), Inches(3.85), Inches(3.8), Inches(0.04))
-line.fill.solid()
-line.fill.fore_color.rgb = AMBER
-line.line.fill.background()
-
-add_text_box(s, 5.9, 4.05, 3.8, 0.5,
+add_text_box(s, 5.9, 3.9, 3.8, 0.5,
     "This is what a network operator or regulator can actually use.",
     Pt(12), STEEL, italic=True)
 
@@ -473,10 +435,6 @@ for i, step in enumerate(steps):
 s = new_slide()
 
 add_text_box(s, 0.6, 0.9, 8.8, 0.55, "Links & Repository", Pt(28), WHITE, True)
-line = s.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.6), Inches(1.5), Inches(1.2), Inches(0.03))
-line.fill.solid()
-line.fill.fore_color.rgb = AMBER
-line.line.fill.background()
 
 links = [
     ("PUBLIC DEMO", "https://dexflex66.github.io/gridai/"),
