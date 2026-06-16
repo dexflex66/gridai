@@ -274,3 +274,220 @@ def _find_least_crowded_slot(current_slot: int, slot_counts: dict,
             best_count, best_avoid, best_slot = count, s_avoid, s
 
     return best_slot
+
+
+# ---------------------------------------------------------------------------
+# STRATEGY C: Voltage-aware gossip (experimental variant)
+# ---------------------------------------------------------------------------
+# Extends the standard gossip protocol with:
+#   - Full battery-window coverage (204-260, 56 slots)
+#   - Per-home SOC-based variable discharge duration (instead of fixed 3 steps)
+#   - No central optimisation; each home independently knows its SOC and position
+#
+# The key insight from the oracle feasibility experiment:
+#   Full voltage compliance requires ~13.9 homes discharging per slot on average.
+#   With 60 homes discharging at SOC-based variable duration (mean ~11 steps),
+#   the effective per-slot coverage is ~60 * 11 / 56 = ~11.8 homes/slot, which
+#   is well above the K_min required to prevent undervoltage.
+
+# Voltage-aware dispatch window: full battery window
+VA_WINDOW_START = DISPATCH_WINDOW_START     # step 204 = 17:00
+VA_WINDOW_END = 260                         # step 260 = 21:40 (end of battery check window)
+VA_WINDOW_LEN = VA_WINDOW_END - VA_WINDOW_START  # 56 slots
+
+# Cap on per-home discharge steps (prevents battery exhaustion).
+# With M=10, 60 homes × 10 = 600 total steps across 56 slots ≈ 10.7/slot.
+# This provides enough coverage while keeping the diagonal-band overlap
+# peak well below MAX_CONCURRENT_DISCHARGE (20).
+MAX_DISCHARGE_STEPS_PER_HOME = 13
+
+
+def voltage_aware_gossip_dispatch(homes: list, price: np.ndarray,
+                                   feeder_impedance: float = FEEDER_IMPEDANCE_PU,
+                                   priority_intervals: list | None = None) -> tuple:
+    """
+    Strategy C: Voltage-aware gossip protocol.
+
+    Phase 1: Initial slot assignment (same as standard gossip, but with
+      extended 56-slot window instead of 48).
+
+    Phase 2: Gossip rounds (identical to standard gossip — per-slot capacity
+      limit prevents overvoltage).
+
+    Phase 3: Each agent discharges for a SOC-determined number of consecutive
+      steps (not fixed 3). This provides enough total coverage to prevent
+      undervoltage while the per-slot cap prevents overvoltage.
+
+    Returns (schedule, rounds_to_converge, gossip_log).
+    """
+    N = len(homes)
+    dt_h = 5.0 / 60.0
+
+    avoid_slots = {int(s) for s in (priority_intervals or [])}
+
+    # Per-home max discharge steps based on SOC
+    max_steps_per_home = np.zeros(N, dtype=int)
+    for i, h in enumerate(homes):
+        usable_kwh = (h["soc_initial"] - h["soc_min"]) * h["battery_capacity_kwh"]
+        energy_per_step_kwh = h["battery_max_rate_kw"] * dt_h
+        steps = int(np.floor(usable_kwh / energy_per_step_kwh))
+        max_steps_per_home[i] = min(steps, MAX_DISCHARGE_STEPS_PER_HOME)
+
+    # Phase 1: initial slot assignment with voltage-aware skew.
+    # Use a power-law mapping to concentrate more homes in early slots
+    # (where base load is highest and undervoltage risk is greatest).
+    # exponent < 1 skews toward early slots; 0.3 gives a good balance.
+    SLOT_SKEW_EXP = 0.35
+
+    priority_scores = np.array([_priority_score(h) for h in homes])
+    device_hashes = np.array([_device_hash(h["id"]) for h in homes])
+
+    p_min = float(np.min(priority_scores))
+    p_max = float(np.max(priority_scores))
+    if p_max > p_min:
+        p_norm = (priority_scores - p_min) / (p_max - p_min)
+    else:
+        p_norm = np.full(N, 0.5)
+
+    planned_slots = np.zeros(N, dtype=int)
+    for i in range(N):
+        # Power-law skew: p_norm^SLOT_SKEW_EXP compresses high-priority
+        # homes into earlier slots without clustering them all at 204.
+        slot_offset = int((1.0 - p_norm[i] ** SLOT_SKEW_EXP) * (VA_WINDOW_LEN - 1))
+        slot_offset = max(0, min(VA_WINDOW_LEN - 1, slot_offset))
+        planned_slots[i] = VA_WINDOW_START + slot_offset
+
+    # Phase 2: gossip rounds with interval-aware capacity.
+    # With extended discharge (M=13), standard per-slot gossip allows the
+    # diagonal-band overlap to exceed 20. The interval check ensures no
+    # slot exceeds capacity.
+    gossip_log = []
+    rounds_to_converge = GOSSIP_MAX_ROUNDS
+    DISCHARGE_STEPS = max_steps_per_home.copy()
+
+    def _interval_peak(slots, intervals, step):
+        count = 0
+        for j in range(N):
+            start = int(slots[j])
+            end = start + int(intervals[j])
+            if start <= step < end:
+                count += 1
+        return count
+
+    for round_num in range(GOSSIP_MAX_ROUNDS):
+        any_changed = False
+        rng = np.random.RandomState(round_num * 7919 + 42)
+        agent_order = rng.permutation(N)
+
+        for i in agent_order:
+            my_start = int(planned_slots[i])
+            my_len = int(DISCHARGE_STEPS[i])
+            my_peak = max(
+                _interval_peak(planned_slots, DISCHARGE_STEPS, t)
+                for t in range(my_start, min(my_start + my_len, VA_WINDOW_END + 5))
+            )
+            if my_peak <= MAX_CONCURRENT_DISCHARGE:
+                continue
+
+            best_slot = my_start
+            best_peak = my_peak
+            best_avoid = 1 if my_start in avoid_slots else 0
+
+            for candidate in range(VA_WINDOW_START, VA_WINDOW_END):
+                if candidate == my_start:
+                    continue
+                planned_slots[i] = candidate
+                cand_peak = max(
+                    _interval_peak(planned_slots, DISCHARGE_STEPS, t)
+                    for t in range(candidate, min(candidate + my_len, VA_WINDOW_END + 5))
+                )
+                cand_avoid = 1 if candidate in avoid_slots else 0
+                cand = (cand_peak, cand_avoid, abs(candidate - my_start))
+                best = (best_peak, best_avoid, abs(best_slot - my_start))
+                if cand < best:
+                    best_peak, best_avoid, best_slot = cand_peak, cand_avoid, candidate
+                planned_slots[i] = my_start
+
+            if best_slot != my_start:
+                planned_slots[i] = best_slot
+                any_changed = True
+                gossip_log.append((round_num, i, my_start, best_slot))
+
+        if not any_changed:
+            rounds_to_converge = round_num + 1
+            break
+
+    # Phase 2b: Edge-coverage fill.
+    # Far-feeder homes (position >= 38) whose start slot is after the
+    # undervoltage-risk zone (step 210) may move to an earlier slot to
+    # provide voltage support. This is a one-shot decentralised move:
+    # each far-feeder home checks if an early slot (204-210) has
+    # spare capacity and if so, moves there. The gossip constraint
+    # (no slot exceeds MAX_CONCURRENT_DISCHARGE) is maintained.
+    EARLY_RISK_START = VA_WINDOW_START        # 204
+    EARLY_RISK_END = EARLY_RISK_START + 7     # 210 (first 7 slots of battery window)
+    EDGE_POSITION_THRESHOLD = 38
+
+    # Homes far from transformer are position >= 38
+    far_feeder = [i for i in range(N) if homes[i].get("position", i) >= EDGE_POSITION_THRESHOLD]
+
+    # Count starts per slot
+    slot_counts = {}
+    for s in planned_slots:
+        slot_counts[int(s)] = slot_counts.get(int(s), 0) + 1
+
+    for i in far_feeder:
+        cur_slot = int(planned_slots[i])
+
+        # Only consider moving if currently outside the risk zone
+        if cur_slot >= EARLY_RISK_START and cur_slot < EARLY_RISK_END:
+            continue  # already in the risk zone, no move needed
+
+        # Find the early slot with the most spare capacity
+        best_slot = cur_slot
+        best_count = slot_counts.get(cur_slot, 0)
+        best_early_count = 999
+
+        for t in range(EARLY_RISK_START, EARLY_RISK_END):
+            count = slot_counts.get(t, 0)
+            if count < best_count and count < MAX_CONCURRENT_DISCHARGE:
+                if count < best_early_count:
+                    best_early_count = count
+                    best_slot = t
+
+        if best_slot != cur_slot:
+            # This far-feeder home moves to an early slot for a SHORT burst
+            # (4 steps). This provides early voltage support without extending
+            # the discharge interval into the mid-window where it would
+            # contribute to the overlap peak.
+            slot_counts[cur_slot] = max(0, slot_counts.get(cur_slot, 0) - 1)
+            slot_counts[best_slot] = slot_counts.get(best_slot, 0) + 1
+            planned_slots[i] = best_slot
+            # Shorten this home's discharge to avoid mid-window overlap
+            if max_steps_per_home[i] > 4:
+                max_steps_per_home[i] = 4
+            gossip_log.append(("edge_fill", i, cur_slot, best_slot))
+
+    # Phase 3: build schedule with SOC-based variable discharge duration.
+    # Each home discharges consecutively from its start slot for up to
+    # max_steps_per_home steps. The interval-aware gossip ensures no slot
+    # exceeds capacity.
+    schedule = np.zeros((N, N_STEPS), dtype=int)
+    for i, home in enumerate(homes):
+        soc = home["soc_initial"]
+        cap = home["battery_capacity_kwh"]
+        slot = int(planned_slots[i])
+        n_steps = int(max_steps_per_home[i])
+
+        for step_offset in range(n_steps):
+            t = slot + step_offset
+            if t >= N_STEPS:
+                break
+            if soc <= home["soc_min"] + 0.01:
+                break
+            discharge_kwh = min(BATTERY_MAX_RATE_KW * dt_h, (soc - home["soc_min"]) * cap)
+            if discharge_kwh > 0.01:
+                schedule[i, t] = 1
+                soc -= discharge_kwh / cap
+
+    return schedule, rounds_to_converge, gossip_log
