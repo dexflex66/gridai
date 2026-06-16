@@ -30,6 +30,7 @@ async function main() {
     },
   });
   const page = await context.newPage();
+  await page.setViewportSize(VIEWPORT);
 
   const consoleErrors = [];
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
@@ -101,13 +102,14 @@ async function main() {
 
   await sleep(1000);
 
-  const files = fs.readdirSync(OUT).filter((f) => f.endsWith('.webm'));
+  const files = fs.readdirSync(OUT)
+    .filter((f) => f.endsWith('.webm'))
+    .sort((a, b) => fs.statSync(path.join(OUT, b)).mtimeMs - fs.statSync(path.join(OUT, a)).mtimeMs);
   if (files.length === 0) throw new Error('No .webm video file produced');
   const videoPath = path.join(OUT, files[0]);
   const destPath = path.join(OUT, 'gridai_demo_v3.webm');
-  if (videoPath !== destPath) {
-    fs.renameSync(videoPath, destPath);
-  }
+  if (fs.existsSync(destPath)) fs.unlinkSync(destPath);
+  if (videoPath !== destPath) fs.renameSync(videoPath, destPath);
 
   const stat = fs.statSync(destPath);
   const sizeMB = (stat.size / 1024 / 1024).toFixed(2);

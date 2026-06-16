@@ -1,0 +1,19 @@
+GridAI — 90-Second Demo Narration (spoken lines)
+
+[0–10s | Side-by-side, step 144 (12:00) | Calm grids]
+Australia has fifteen gigawatt-hours of home batteries, and it's growing fast — all reacting to one electricity price signal.
+
+[10–25s | Naive only, step 211 (17:35) | Full amber flash + red breaches + demand rebound spike]
+When they all follow that signal, they synchronise. The fleet creates a new evening peak instead of smoothing the old one. Four hundred seventy-one voltage breaches at the network edge. This is the herding problem.
+
+[25–40s | Naive only, step 211 | Point to BAND Audit Trail card + red ESCALATE]
+Our Compliance agent catches it live and escalates. Full Band audit trail — traceable to the agent, the interval, and the cause: battery herding.
+
+[40–60s | Gossip only, step 211 | Staggered ripple]
+GridAI is a gossip-based decentralised protocol. Each battery negotiates with local neighbours only — using its state of charge and the owner's preference. No central controller. It converges in one to two rounds, on the inverter hardware that already exists.
+
+[60–75s | Gossip only, step 211 | APPROVED + voltage panel (no red) + purple undervoltage annotation]
+Herding eliminated — four hundred seventy-one breaches to zero. The Compliance agent approves. And honestly: desynchronising surfaces a second effect at the far edge of the feeder — undervoltage. It's distinct from herding, it's traceable, and it's the next problem to solve.
+
+[75–90s | 3-Way Heterogeneity Contrast panel]
+Here's why it works. A realistic, varied fleet desynchronises hard — synchrony one-point-zero down to zero-point-one-seven. An identical fleet barely moves. The mechanism is diversity in what each battery wants, not the negotiation itself. The protocol works because the fleet is real.

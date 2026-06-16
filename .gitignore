@@ -9,6 +9,11 @@ dist/
 build/
 .DS_Store
 
+# Intermediate build artifacts
+video/
+audio/
+*.webm
+
 # Secrets — never commit
 .env
 .env.*

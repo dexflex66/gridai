@@ -522,3 +522,180 @@ class TestMockBandAuditLog:
         steps = [e["step"] for e in band.audit_log()]
         assert steps == sorted(steps)
         assert len(steps) == len(set(steps))
+
+
+# ---------------------------------------------------------------------------
+# Test 6: Causal link — priority_intervals change gossip dispatch (mechanistic)
+# ---------------------------------------------------------------------------
+# Uses homogeneous fleet because MAX_CONCURRENT_DISCHARGE=20, and gossip_hom
+# packs 60 agents > 20, triggering evictions where _find_least_crowded_slot
+# consults avoid_slots. Heterogeneous fleet peaks at ~10 (< 20), so no
+# evictions and avoid_slots is never consulted.
+
+CRAFTED_FLAGGED_STEPS = list(range(204, 230))  # first 26 of the 57 battery-window steps
+
+
+@pytest.fixture(scope="module")
+def gossip_hom_synthetic_baseline():
+    return run_scenario(
+        strategy="gossip",
+        heterogeneous=False,
+        n_homes=60,
+        rng_seed=42,
+        load_source="synthetic",
+    )
+
+
+@pytest.fixture(scope="module")
+def gossip_hom_synthetic_with_priority():
+    return run_scenario(
+        strategy="gossip",
+        heterogeneous=False,
+        n_homes=60,
+        rng_seed=42,
+        load_source="synthetic",
+        priority_intervals=CRAFTED_FLAGGED_STEPS,
+    )
+
+
+class TestPriorityIntervalsCausalLink:
+    """priority_intervals → avoid_slots → evicted agents steered away from flagged steps."""
+
+    def test_flagged_steps_total_discharge_lower(
+        self, gossip_hom_synthetic_baseline, gossip_hom_synthetic_with_priority
+    ):
+        baseline_arr = np.array(gossip_hom_synthetic_baseline["dispatch_series"])
+        priority_arr = np.array(gossip_hom_synthetic_with_priority["dispatch_series"])
+
+        baseline_sim = np.sum(baseline_arr[:, CRAFTED_FLAGGED_STEPS] == 1)
+        priority_sim = np.sum(priority_arr[:, CRAFTED_FLAGGED_STEPS] == 1)
+
+        assert priority_sim < baseline_sim, (
+            f"priority_intervals should reduce discharge on flagged steps: "
+            f"{priority_sim} vs baseline {baseline_sim}"
+        )
+
+    def test_discharge_shifts_to_unflagged_steps(
+        self, gossip_hom_synthetic_baseline, gossip_hom_synthetic_with_priority
+    ):
+        unflagged = [s for s in range(204, 260) if s not in CRAFTED_FLAGGED_STEPS]
+        baseline_arr = np.array(gossip_hom_synthetic_baseline["dispatch_series"])
+        priority_arr = np.array(gossip_hom_synthetic_with_priority["dispatch_series"])
+
+        bl_unflagged = np.sum(baseline_arr[:, unflagged] == 1)
+        pr_unflagged = np.sum(priority_arr[:, unflagged] == 1)
+
+        assert pr_unflagged > bl_unflagged, (
+            f"discharge should shift to unflagged steps: {pr_unflagged} vs {bl_unflagged}"
+        )
+
+    def test_synchrony_holds(self, gossip_hom_synthetic_with_priority):
+        dispatch = np.array(gossip_hom_synthetic_with_priority["dispatch_series"])
+        bat = dispatch[:, 204:260]
+        sim = np.sum(bat == 1, axis=0)
+        hom_baseline = np.max(sim) / 60  # ~0.483
+        assert hom_baseline <= 0.50
+
+    def test_zero_herding_overvoltage(self, gossip_hom_synthetic_with_priority):
+        breach = gossip_hom_synthetic_with_priority["voltage_breach_events"]
+        herding_ov = [
+            e for e in breach
+            if e["cause"] == "battery_herding" and e["band_limit_crossed"] == "upper"
+        ]
+        assert len(herding_ov) == 0
+
+
+# ---------------------------------------------------------------------------
+# Test 7: Causal chain — Forecaster analyses naive, Coordinator runs gossip
+#         using the Forecaster's high_synchrony_intervals
+# ---------------------------------------------------------------------------
+# Forecaster on naive_hom AEMO extracts ~15 flagged intervals (steps 211–225)
+# — a proper subset of the 57-step window. These are passed to gossip_hom as
+# priority_intervals, and evicted agents avoid them. Compares against gossip_hom
+# without priority_intervals.
+
+@pytest.fixture(scope="module")
+def naive_hom_aemo_result(aemo_profile):
+    return run_scenario(
+        strategy="naive",
+        heterogeneous=False,
+        n_homes=60,
+        rng_seed=42,
+        load_source="aemo",
+        aemo_profile=aemo_profile,
+    )
+
+
+class TestForecasterToCoordinatorCausalChain:
+    """Forecaster→Coordinator handoff is causal: naive-derived intervals improve gossip."""
+
+    @pytest.fixture(autouse=True)
+    def setup(self, naive_hom_aemo_result, aemo_profile):
+        band = MockBand()
+        forecaster = ForecasterAgent(band)
+        forecaster.run(naive_hom_aemo_result, "naive_homogeneous", load_source="aemo")
+        self.audit = band.audit_log()
+
+        rw_handoffs = [
+            e["payload"] for e in self.audit
+            if e["message_type"] == "handoff:risk_window"
+        ]
+        assert len(rw_handoffs) == 1
+
+        risk_window = rw_handoffs[0]
+        forecaster_intervals = [
+            iv["step"] for iv in risk_window.get("high_synchrony_intervals", [])
+        ]
+
+        assert len(forecaster_intervals) > 0, (
+            "naive_hom must produce some high_synchrony_intervals for the chain test"
+        )
+        assert len(forecaster_intervals) < 57, (
+            "need a proper subset (not all 57) for avoid_slots to have effect"
+        )
+
+        self.forecaster_intervals = forecaster_intervals
+        self.baseline = run_scenario(
+            strategy="gossip",
+            heterogeneous=False,
+            n_homes=60,
+            rng_seed=42,
+            load_source="aemo",
+            aemo_profile=aemo_profile,
+        )
+        self.with_intervals = run_scenario(
+            strategy="gossip",
+            heterogeneous=False,
+            n_homes=60,
+            rng_seed=42,
+            load_source="aemo",
+            aemo_profile=aemo_profile,
+            priority_intervals=forecaster_intervals,
+        )
+
+    def test_forecaster_to_gossip_chain_produces_avoidance(self):
+        base_arr = np.array(self.baseline["dispatch_series"])
+        with_arr = np.array(self.with_intervals["dispatch_series"])
+
+        flagged = self.forecaster_intervals
+        base_sim = np.sum(base_arr[:, flagged] == 1)
+        with_sim = np.sum(with_arr[:, flagged] == 1)
+
+        assert with_sim < base_sim, (
+            f"Forecaster→Coordinator causal chain should reduce discharge on flagged "
+            f"steps: {with_sim} vs baseline {base_sim}"
+        )
+
+    def test_headline_synchrony_holds(self):
+        dispatch = np.array(self.with_intervals["dispatch_series"])
+        bat = dispatch[:, 204:260]
+        sim = np.sum(bat == 1, axis=0)
+        assert np.max(sim) / 60 <= 0.50
+
+    def test_zero_herding_overvoltage(self):
+        breach = self.with_intervals["voltage_breach_events"]
+        herding_ov = [
+            e for e in breach
+            if e["cause"] == "battery_herding" and e["band_limit_crossed"] == "upper"
+        ]
+        assert len(herding_ov) == 0

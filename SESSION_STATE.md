@@ -159,6 +159,15 @@ step=8  operator    -> ALL          [operator_decision]
 - Pushed to GitHub Pages (docs/index.html), awaiting deployment (live page still serving cached step 204;
   expected to flip within ~2 min).
 
+## DONE (Day 5+ — causal-link tests, verified)
+
+- Two new test classes in `tests/test_agents.py` proving Forecaster→Coordinator→gossip dispatch handoff measurably steers evicted agents away from flagged high-synchrony intervals:
+  1. **`TestPriorityIntervalsCausalLink`** (4 tests): mechanistic — runs `gossip_hom_synthetic` with crafted `priority_intervals=[204..229]` vs without, asserting flagged steps have lower discharge, unflagged steps gain discharge, synchrony ≤0.50, zero herding overvoltage.
+  2. **`TestForecasterToCoordinatorCausalChain`** (3 tests): end-to-end chain — Forecaster on naive_hom AEMO extracts ~15 flagged intervals (steps 211–225, proper subset of 57), Coordinator runs gossip_hom with those intervals, asserts avoidance vs gossip_hom without intervals, synchrony ≤0.50, zero herding overvoltage.
+- **Key insight discovered**: heterogeneous gossip peaks at ~10 simultaneous (< `MAX_CONCURRENT_DISCHARGE=20`), so no evictions occur and `avoid_slots` is never consulted. Switched both test classes to **homogeneous** fleet where 60 agents > 20 cap → evictions fire → `_find_least_crowded_slot()` with `avoid_slots` is exercised. Tests are mechanistically correct.
+- **Warning documented**: `priority_intervals` has zero effect when ALL 57 battery steps are flagged (degenerate case — ranks collapse to occupancy+distance) or when no evictions occur (het fleet below cap). The Forecaster's 15-interval proper subset on naive_hom avoids both degenerate cases.
+- All 89 tests pass (21 sim + 15 aemo + 9 coherence + 44 agents ← 37 original + 7 new).
+
 ## NEXT
 
 - Record the 90-second demo video (per viz/NARRATION.md) and submit before **June 19, 15:00 UTC**.

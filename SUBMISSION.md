@@ -18,7 +18,7 @@ Regulated and High-Stakes Workflows
 ## Technologies
 Band SDK (multi-agent collaboration layer) · Python · NumPy · gossip-based decentralised coordination ·
 multi-agent systems · HTML5 Canvas (standalone visualisation) · AEMO 2012 Victorian NEM data ·
-pytest (82 tests) · AS IEC 60038:2022 / CSIP-AUS context
+pytest (89 tests) · AS IEC 60038:2022 / CSIP-AUS context
 
 ---
 
@@ -86,8 +86,7 @@ field-for-field.
   lead with this.
 - **Residual far-feeder undervoltage** (435 battery-herding undervolt events) is noted honestly as a
   second-order phenomenon the protocol *surfaces* — distinct from herding, traceable, and the next problem.
-- **89 automated tests** covering provenance coherence, PV-vs-battery cause separation, and agent
-  interdependence.
+- **89 automated tests** covering provenance coherence, PV-vs-battery cause separation, causal-link steering, and agent interdependence.
 
 ### What we don't claim
 We do **not** claim peak shaving as the primary outcome. We do **not** claim to replace dynamic operating
@@ -120,8 +119,8 @@ showing: **RAISE Summit, Paris, July 4–5**.
 ## Required deliverables (lablab)
 - **Working prototype (URL):** https://dexflex66.github.io/gridai/ — single self-contained file, no server,
   no build; runs offline in any browser. Hosted on GitHub Pages.
-- **Pitch video (≤ 5 min, MP4):** record per `viz/NARRATION.md` (90s single take over the demo).
-- **Slide deck (PDF):** _to produce Day 5–6._
+- **Pitch video (≤ 5 min, MP4):** `final/gridai_submission_video_FINAL.mp4` — 90s, 1920×1080, 28.7 MB, −17.9 LUFS. Recorded per `viz/NARRATION.md`.
+- **Slide deck (PDF):** `submission/gridai_lablab_band_of_agents_2026/assets/gridai_pitch_deck.pdf` — 12 slides, 410 KB.
 - **Public GitHub repo:** this repository.
 - **Cover image (16:9):** `viz/screenshots/03_naive_synchronised_flash.png` (the synchronised amber flash)
   or `02_evening_peak_sidebyside.png`.
