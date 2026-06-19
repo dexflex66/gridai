@@ -146,7 +146,7 @@ def run():
         f.write(f"  primary tuning target. A prototyped voltage-aware extension (branch\n")
         f.write(f"  `voltage-aware-edge-coverage`) reduces this by ~90%% in experiments.\n")
         f.write(f"- Not production-ready.\n")
-        f.write(f"- Not fully decentralised (Phase 7 uses central repair).\n")
+        f.write(f"- Not decentralised — the Coordinator allocates dispatch slots using global fleet state. A fully decentralised peer-to-peer implementation is the next step.\n")
         f.write(f"- Not real-feeder validated.\n")
         f.write(f"- Not grid-agnostic.\n")
     print(f"Report written to {md_path}")

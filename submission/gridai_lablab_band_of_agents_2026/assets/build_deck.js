@@ -256,14 +256,14 @@ function metricBar(slide, x, y, w, label, value, color) {
   titleBar(s, "THE SOLUTION");
 
   // Left text column
-  s.addText("GridAI: gossip-based decentralised protocol with a Band-native compliance layer.", {
+  s.addText("GridAI: priority-based coordination protocol with a Band-native compliance layer.", {
     x: 0.6, y: 1.2, w: 5.0, h: 0.55,
     fontSize: 15, fontFace: FONT, bold: true, color: WHITE, margin: 0,
   });
 
   s.addText([
-    { text: "Each battery negotiates with local neighbours only using SOC and owner preference.", options: { bullet: true, breakLine: true } },
-    { text: "No central controller. Converges in 1 round.", options: { bullet: true, breakLine: true } },
+    { text: "The Coordinator allocates dispatch slots from global fleet state.", options: { bullet: true, breakLine: true } },
+    { text: "Converges in 1 round.", options: { bullet: true, breakLine: true } },
     { text: "", options: { breakLine: true, fontSize: 6 } },
     { text: "Battery-herding overvoltage:  ", options: { breakLine: false, color: WHITE } },
     { text: "471 → 0", options: { breakLine: true, color: AMBER, bold: true, fontSize: 16 } },

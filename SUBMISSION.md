@@ -7,16 +7,16 @@ simulation + test suite; nothing is inflated.
 ---
 
 ## Submission title (≤ 50 chars)
-`GridAI — Decentralised DER Coordination`
+`GridAI — DER Coordination Protocol`
 
 ## Short description (≤ 255 chars)
-Home-battery fleets that follow one price signal synchronise and create a new evening peak and voltage breaches. GridAI is a four-agent protocol on Band where batteries desynchronise via local gossip — herding overvoltage breaches 471→0, with a full compliance audit trail.
+Home-battery fleets that follow one price signal synchronise and create a new evening peak and voltage breaches. GridAI is a four-agent protocol on Band where a Coordinator desynchronises batteries via priority-based dispatch allocation — herding overvoltage breaches 471→0, with a full compliance audit trail.
 
 ## Main track
 Regulated and High-Stakes Workflows
 
 ## Technologies
-Band SDK (multi-agent collaboration layer) · Python · NumPy · gossip-based decentralised coordination ·
+Band SDK (multi-agent collaboration layer) · Python · NumPy · priority-based coordination ·
 multi-agent systems · HTML5 Canvas (standalone visualisation) · AEMO 2012 Victorian NEM data ·
 pytest (89 tests) · AS IEC 60038:2022 / CSIP-AUS context
 
@@ -48,10 +48,10 @@ public product framing rarely exposes cause-attributed compliance as the
 primary artifact. GridAI makes that distinction the core regulated workflow.
 
 ### Solution
-GridAI is a **decentralised multi-agent coordination protocol**. Four agents — **Forecaster,
+GridAI is a **multi-agent coordination protocol**. Four agents — **Forecaster,
 Coordinator, Compliance, Operator** — collaborate through **Band as the actual collaboration layer**,
-not a notification wrapper. The Coordinator runs a **gossip protocol**: each battery negotiates its
-dispatch slot with a handful of local neighbours using its state of charge and the owner's
+not a notification wrapper. The Coordinator runs a **priority-based dispatch**: each battery's
+slot is allocated from global fleet state using its state of charge and the owner's
 willingness-to-discharge. The fleet desynchronises through **heterogeneity** — diversity in what each
 battery wants — not through symmetric negotiation. The **Compliance agent** reviews every plan against
 **AS IEC 60038:2022** voltage limits, flags **battery-herding** breaches (kept distinct from midday

@@ -1,7 +1,7 @@
 # GridAI Final Validation Report
 
 - **Branch:** `main`
-- **Commit:** `cc9d9f3`
+- **Commit:** `178e92f`
 - **Date:** 2026-06-19 03:48 UTC
 - **Test command:** `pytest`
 
@@ -18,7 +18,7 @@
 
 ........................................................................ [ 80%]
 .................                                                        [100%]
-89 passed in 9.11s
+89 passed in 7.73s
 
 **All tests pass.**
 
@@ -33,6 +33,6 @@ in simulation, while transparently reporting residual voltage limitations.
   primary tuning target. A prototyped voltage-aware extension (branch
   `voltage-aware-edge-coverage`) reduces this by ~90%% in experiments.
 - Not production-ready.
-- Not fully decentralised (Phase 7 uses central repair).
+- Not decentralised — the Coordinator allocates dispatch slots using global fleet state. A fully decentralised peer-to-peer implementation is the next step.
 - Not real-feeder validated.
 - Not grid-agnostic.

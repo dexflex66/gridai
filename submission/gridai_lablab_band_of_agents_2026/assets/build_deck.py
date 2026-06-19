@@ -240,12 +240,12 @@ s = new_slide()
 title_bar(s, "THE SOLUTION")
 
 add_text_box(s, 0.6, 1.2, 5.2, 0.55,
-    "GridAI: gossip-based decentralised protocol with a Band-native compliance layer.",
+    "GridAI: priority-based coordination protocol with a Band-native compliance layer.",
     Pt(16), WHITE, True)
 
 bullets = [
-    ("Each battery negotiates with local neighbours only using SOC and owner preference.", Pt(13), WHITE),
-    ("No central controller. Converges in 1 round.", Pt(13), WHITE),
+    ("The Coordinator allocates dispatch slots from global fleet state.", Pt(13), WHITE),
+    ("Converges in 1 round.", Pt(13), WHITE),
 ]
 ty = 2.0
 for bl, sz, clr in bullets:

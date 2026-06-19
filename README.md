@@ -1,4 +1,4 @@
-# GridAI — Decentralised Battery Fleet Coordination
+# GridAI — Battery Fleet Coordination Protocol
 
 GridAI solves the herding problem in distributed energy resource (DER) coordination.
 
@@ -12,7 +12,7 @@ When thousands of home batteries follow the same price signal, they all discharg
 
 ## The Solution
 
-A gossip-based decentralised protocol where each battery agent negotiates only with its local neighbours. No central controller. The fleet desynchronises via local intent exchange, producing a flatter aggregate demand curve while respecting voltage limits and owner preferences.
+A priority-based coordination protocol where the Coordinator allocates each battery's dispatch slot using global fleet state to desynchronise the fleet, producing a flatter aggregate demand curve while respecting voltage limits and owner preferences.
 
 **Critical design point:** desynchronisation comes from fleet **heterogeneity** (varied private thresholds and SOC), not from negotiation alone. The protocol channels heterogeneity; on a homogeneous fleet it only weakly desynchronises.
 
@@ -55,7 +55,7 @@ flowchart TB
 
 ## Key Results
 
-| Metric | Naive (price-following) | Gossip (decentralised) |
+| Metric | Naive (price-following) | Gossip-style coordination |
 |--------|:-----------------------:|:----------------------:|
 | Battery-herding overvoltage events | **471** | **0** |
 | Overvoltage steps (evening peak) | 14 steps | 0 steps |

@@ -239,7 +239,7 @@ HTML_TEMPLATE = r"""<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GridAI — Decentralised Grid Intelligence Demo</title>
+<title>GridAI — Priority-Based Coordination Demo</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%230a0e1a'/><circle cx='8' cy='8' r='4' fill='%23f59e0b'/></svg>">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -358,7 +358,7 @@ canvas { display: block; }
   <div class="header-row">
     <div class="logo-area">
       <h1>Grid<span>AI</span></h1>
-      <div class="tagline">Decentralised gossip coordination · AEMO load profile · 60 homes · 24 hours</div>
+      <div class="tagline">Priority-based coordination · AEMO load profile · 60 homes · 24 hours</div>
     </div>
     <div class="view-controls">
       <div class="toggle-group" id="viewToggle">
