@@ -267,7 +267,7 @@ function metricBar(slide, x, y, w, label, value, color) {
     { text: "", options: { breakLine: true, fontSize: 6 } },
     { text: "Battery-herding overvoltage:  ", options: { breakLine: false, color: WHITE } },
     { text: "471 → 0", options: { breakLine: true, color: AMBER, bold: true, fontSize: 16 } },
-    { text: "Honest tradeoff: mild far-feeder undervoltage (distinct from herding)", options: { color: STEEL, italic: true } },
+    { text: "Honest tradeoff: residual far-feeder undervoltage, 435 events (distinct from herding)", options: { color: STEEL, italic: true } },
   ], { x: 0.6, y: 1.9, w: 5.0, h: 2.2, fontSize: 12, fontFace: FONT, color: WHITE, margin: 0 });
 
   // Right side: HERO screenshot

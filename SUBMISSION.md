@@ -120,7 +120,7 @@ showing: **RAISE Summit, Paris, July 4–5**.
 - **Working prototype (URL):** https://dexflex66.github.io/gridai/ — single self-contained file, no server,
   no build; runs offline in any browser. Hosted on GitHub Pages.
 - **Pitch video (≤ 5 min, MP4):** `final/gridai_submission_video_FINAL.mp4` — 90s, 1920×1080, 28.7 MB, −17.9 LUFS. Recorded per `viz/NARRATION.md`.
-- **Slide deck (PDF):** `submission/gridai_lablab_band_of_agents_2026/assets/gridai_pitch_deck.pdf` — 12 slides, 410 KB.
+- **Slide deck (PDF):** `submission/gridai_lablab_band_of_agents_2026/assets/gridai_pitch_deck.pdf` — 10 slides, 410 KB.
 - **Public GitHub repo:** this repository.
 - **Cover image (16:9):** `viz/screenshots/03_naive_synchronised_flash.png` (the synchronised amber flash)
   or `02_evening_peak_sidebyside.png`.

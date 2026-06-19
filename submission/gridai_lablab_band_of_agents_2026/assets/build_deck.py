@@ -261,7 +261,7 @@ add_text_box(s, 0.6, ty, 5.0, 0.55, "471 \u2192 0", Pt(36), AMBER, True)
 ty += 0.6
 
 add_text_box(s, 0.6, ty, 5.0, 0.35,
-    "Honest tradeoff: mild far-feeder undervoltage (distinct from herding, surfaced not hidden)",
+    "Honest tradeoff: residual far-feeder undervoltage, 435 events (distinct from herding, surfaced not hidden)",
     Pt(10), STEEL, italic=True)
 
 img = os.path.join(ASSETS, "03_naive_peak_HERO.png")

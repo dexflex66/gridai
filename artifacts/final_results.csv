@@ -1,0 +1,5 @@
+scenario,ov_events,uv_events,ov_steps,synchrony,max_simultaneous,convergence_rounds
+Naive hom AEMO,471,516,14,1.000,60,None
+Naive het AEMO,15,364,2,0.700,42,None
+Gossip hom AEMO,0,510,0,0.367,22,2
+Gossip het AEMO,0,435,0,0.167,10,1

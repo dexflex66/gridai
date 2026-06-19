@@ -80,6 +80,10 @@ python3 agents/run_agents.py
 
 # Run tests
 pytest tests/ -v
+
+# Run final validation reproducibility report
+python sim/runner.py          # ensures all outputs exist
+python scripts/run_final_validation.py
 ```
 
 ### Run against real Band

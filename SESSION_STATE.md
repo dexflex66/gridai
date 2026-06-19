@@ -24,7 +24,7 @@
   of desynchronisation. The headline metric is scoped to OVERvoltage herding (471→0) and the legend
   distinguishes purple from red, so nothing is inflated. RESOLVED (user decision): added an explicit
   honest on-screen annotation under the gossip grid — "herding overvoltage 471 -> 0" plus a note that
-  far-feeder nodes sag to mild undervoltage (a known desync tradeoff, a tuning target, not the herding failure).
+  far-feeder nodes sag to residual undervoltage, 435 events (a known desync tradeoff, a tuning target, not the herding failure).
 - sim/ and agents/ NOT modified (no new output fields were needed). Tests still 82 (unchanged).
 
 ## DONE (verified)
