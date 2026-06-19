@@ -29,7 +29,10 @@ from sim.profiles import (
     price_signal,
     make_homes,
 )
-from sim.strategies import naive_dispatch, gossip_dispatch, voltage_aware_gossip_dispatch
+from sim.strategies import (
+    naive_dispatch, gossip_dispatch,
+    voltage_aware_gossip_dispatch, voltage_constrained_gossip_dispatch,
+)
 
 
 def simulate(homes: list, schedule: np.ndarray) -> dict:
@@ -168,6 +171,11 @@ def run_scenario(
         )
     elif strategy == "voltage_aware_gossip":
         schedule, rounds_to_converge, gossip_log = voltage_aware_gossip_dispatch(
+            homes, price, feeder_impedance=FEEDER_IMPEDANCE_PU,
+            priority_intervals=priority_intervals,
+        )
+    elif strategy == "voltage_constrained_gossip":
+        schedule, rounds_to_converge, gossip_log = voltage_constrained_gossip_dispatch(
             homes, price, feeder_impedance=FEEDER_IMPEDANCE_PU,
             priority_intervals=priority_intervals,
         )
