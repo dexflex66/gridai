@@ -1,0 +1,17 @@
+Australia already has around fifteen gigawatt-hours of home batteries, and fleets like this are growing fast. Now imagine a fleet of them responding to the same price signal.
+
+So when prices spike in the evening, every battery discharges at the same moment. Sixty homes, in lockstep. The fleet creates a new peak instead of smoothing the old one. Four hundred and seventy-one voltage breaches at the network edge. We call this the herding problem.
+
+Our compliance agent catches it live and escalates to the operator. Step seven, full handoff, full audit trail. Every decision traceable to the agent that made it, the data it saw, and the moment it happened.
+
+Now the same evening peak, with GridAI. It's a priority-based coordination protocol. The Coordinator allocates each battery's dispatch slot using the whole fleet's state, its charge level and the owner's preference, to pull them out of lockstep. Converges in one to two rounds, on existing inverter hardware.
+
+The fleet desynchronises. The result: battery-herding overvoltage, four hundred and seventy-one events to zero. The compliance agent approves.
+
+And I want to be upfront about the purple nodes. Those are far-feeder homes that sag into undervoltage when fewer batteries discharge at once. Four hundred and thirty-five events. It's a real tradeoff, distinct from herding, disclosed not hidden, and it's the next thing to tune.
+
+Same minute. Same load. Same fleet. Naive on the left. GridAI on the right.
+
+And the protocol works because the fleet is real. Heterogeneous batteries desynchronise hard. Homogeneous ones don't. The mechanism is value diversity. That's the part most VPP designs miss.
+
+GridAI. Four agents, on Band. Band is the coordination and transport layer, with a native audit trail. The agents do deterministic work locally.

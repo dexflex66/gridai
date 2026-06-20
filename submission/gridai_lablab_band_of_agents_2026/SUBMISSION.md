@@ -7,16 +7,16 @@ simulation + test suite; nothing is inflated.
 ---
 
 ## Submission title (≤ 50 chars)
-`GridAI — Decentralised DER Coordination`
+`GridAI — DER Coordination Protocol`
 
 ## Short description (≤ 255 chars)
-Home-battery fleets that follow one price signal synchronise and create a new evening peak and voltage breaches. GridAI is a four-agent protocol on Band where batteries desynchronise via local gossip — herding overvoltage breaches 471→0, with a full compliance audit trail.
+Home-battery fleets that follow one price signal synchronise and create a new evening peak and voltage breaches. GridAI is a four-agent protocol on Band where a Coordinator desynchronises batteries via priority-based dispatch allocation — herding overvoltage breaches 471→0, with a full compliance audit trail.
 
 ## Main track
 Regulated and High-Stakes Workflows
 
 ## Technologies
-Band SDK (multi-agent collaboration layer) · Python · NumPy · gossip-based decentralised coordination ·
+Band SDK (multi-agent collaboration layer) · Python · NumPy · priority-based coordination ·
 multi-agent systems · HTML5 Canvas (standalone visualisation) · AEMO 2012 Victorian NEM data ·
 pytest (89 tests) · AS IEC 60038:2022 / CSIP-AUS context
 
@@ -34,11 +34,24 @@ curtailment** as a crude workaround. This failure mode gets *worse* as virtual-p
 scales, because it appears precisely when fleets start coordinating against shared signals. It is a
 second-order problem that today's market design walks straight into.
 
+GridAI does not claim to invent DER coordination, gossip protocols, VPPs, or
+voltage-constraint management — those already exist in commercial DERMS
+platforms. Its novelty is the mechanism diagnosis: first-generation VPPs can
+create a second-order grid failure when many batteries respond to the same
+market signal at once. GridAI shows that desynchronisation is not just a
+protocol problem; it depends on fleet-level value heterogeneity. The system
+then turns that diagnosis into a regulated workflow: each voltage breach is
+attributed by cause, separating PV-export conditions from battery-herding
+events, and only protocol-induced failures trigger Compliance escalation
+through Band. Commercial DERMS platforms manage voltage constraints, but their
+public product framing rarely exposes cause-attributed compliance as the
+primary artifact. GridAI makes that distinction the core regulated workflow.
+
 ### Solution
-GridAI is a **decentralised multi-agent coordination protocol**. Four agents — **Forecaster,
+GridAI is a **multi-agent coordination protocol**. Four agents — **Forecaster,
 Coordinator, Compliance, Operator** — collaborate through **Band as the actual collaboration layer**,
-not a notification wrapper. The Coordinator runs a **gossip protocol**: each battery negotiates its
-dispatch slot with a handful of local neighbours using its state of charge and the owner's
+not a notification wrapper. The Coordinator runs a **priority-based dispatch**: each battery's
+slot is allocated from global fleet state using its state of charge and the owner's
 willingness-to-discharge. The fleet desynchronises through **heterogeneity** — diversity in what each
 battery wants — not through symmetric negotiation. The **Compliance agent** reviews every plan against
 **AS IEC 60038:2022** voltage limits, flags **battery-herding** breaches (kept distinct from midday
@@ -77,11 +90,25 @@ field-for-field.
 
 ### What we don't claim
 We do **not** claim peak shaving as the primary outcome. We do **not** claim to replace dynamic operating
-envelopes — we are complementary to them. We do **not** claim effectiveness in a flat-rate VPP contract
-regime where value functions are homogenised at the contract layer; the protocol's benefit scales with
-whatever heterogeneity the market design permits. We do **not** claim production readiness.
+envelopes — we are complementary to them. The benefit weakens when market design suppresses customer or
+device heterogeneity, for example through flat-rate contracts or uniform dispatch incentives. GridAI's
+three-way contrast makes that dependency explicit rather than hiding it. We do **not** claim production
+readiness.
 
 ### What's next
+GridAI is positioned as an assurance and attribution layer that sits between
+DER fleets and the network, not as a replacement for existing DERMS or VPP
+platforms (EnergyHub, Kraken, AutoGrid, GE Vernova, Tesla VPP). The commercial
+wedge is anti-herding assurance: testing before dispatch whether a fleet will
+synchronise and cause rebound, and attributing any voltage breach to its
+physical cause (PV export, battery herding, or underlying feeder condition) in
+a form a network operator or regulator can audit. Industry-scale validation is
+deliberately out of hackathon scope and would require OpenDSS or GridLAB-D
+feeder modelling, multiple real distribution topologies, multi-aggregator
+scenarios, CSIP-AUS as a live interface, communication-latency and
+device-failure behaviour, fairness guarantees, and revenue-preservation
+constraints.
+
 The residual far-feeder undervoltage is the next tractable problem and points directly at integration with
 **dynamic operating envelopes**. Beyond that: larger-fleet scale tests, adversarial-device robustness, and
 pilot conversations with **Amber Electric** and **SA Power Networks** given the market-design fit. Next
@@ -92,7 +119,7 @@ showing: **RAISE Summit, Paris, July 4–5**.
 ## Required deliverables (lablab)
 - **Working prototype (URL):** https://dexflex66.github.io/gridai/ — single self-contained file, no server,
   no build; runs offline in any browser. Hosted on GitHub Pages.
-- **Pitch video (≤ 5 min, MP4):** `final/gridai_submission_video_FINAL.mp4` — 90s, 1920×1080, 28.7 MB, −17.9 LUFS. Recorded per `viz/NARRATION.md`.
+- **Pitch video (≤ 5 min, MP4):** `final/gridai_submission_video_TRUEFINAL.mp4` — 90s, 1920×1080, 28.7 MB, −17.9 LUFS. Recorded per `viz/NARRATION.md`.
 - **Slide deck (PDF):** `assets/gridai_pitch_deck.pdf` — 10 slides, 410 KB.
 - **Public GitHub repo:** this repository.
 - **Cover image (16:9):** `viz/screenshots/03_naive_synchronised_flash.png` (the synchronised amber flash)

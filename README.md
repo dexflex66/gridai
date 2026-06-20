@@ -18,6 +18,10 @@ A priority-based coordination protocol where the Coordinator allocates each batt
 
 ## Architecture
 
+![GridAI Architecture](viz/screenshots/gridai_architecture.png)
+
+*GridAI separates agent coordination from physical acceptance: agents propose dispatch schedules, but voltage/SOC/kW validation decides whether a schedule is accepted, repaired, or reported as residual risk.*
+
 ```mermaid
 flowchart TB
     subgraph Layer1["Layer 1 — Python Simulation Core"]
@@ -68,7 +72,7 @@ All numbers verified against AEMO 2012 Victorian summer data and backed by **89 
 ## Quick Start
 
 ```bash
-cd /Users/mayank/gridai
+cd gridai
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
@@ -146,10 +150,14 @@ gridai/
 └── docs/                 # GitHub Pages deployment (mirror of viz/)
 ```
 
+## Limitations
+
+GridAI is a hackathon prototype, not a production DERMS. The current public results are simulation-based and do not use live feeder telemetry. The feeder model is simplified and does not yet include full three-phase unbalanced power-flow validation. The coordination architecture is priority-based/hybrid through a Coordinator and should not be described as fully decentralised peer-to-peer control. The current public baseline reports residual undervoltage in the relevant scenario (435 battery-herding undervolt events in the gossip-heterogeneous AEMO case); this is disclosed as a limitation and future voltage-support target. Future work includes feeder-specific validation, improved voltage-support optimisation, lower fragmentation/synchrony, and deployment-grade safety testing.
+
 ## Submissions & Links
 
 - **Live demo:** https://dexflex66.github.io/gridai/
-- **Pitch video:** `final/gridai_submission_video_FINAL.mp4` (90s, 1920×1080)
+- **Pitch video:** `final/gridai_submission_video_TRUEFINAL.mp4` (90s, 1920×1080)
 - **Slide deck:** `submission/gridai_lablab_band_of_agents_2026/assets/gridai_pitch_deck.pdf`
 - **Submission form:** `SUBMISSION.md`
 - **Narration script:** `viz/NARRATION.md`

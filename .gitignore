@@ -3,11 +3,13 @@ __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
+.ruff_cache/
 outputs/*.json
 *.egg-info/
 dist/
 build/
 .DS_Store
+~$*
 
 # Intermediate build artifacts
 video/

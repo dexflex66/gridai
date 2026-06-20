@@ -24,4 +24,4 @@
 
 Residual undervoltage remains visible on `main`. The headline gossip-heterogeneous AEMO scenario reports **435 battery-herding undervolt events**. This is disclosed transparently and is the primary tuning target. A prototyped voltage-aware extension on branch `voltage-aware-edge-coverage` reduces this by ~90% in experiments but is **not merged** into `main` and is **not** part of this submission.
 
-GridAI is a hackathon prototype showing fail-closed coordination for home battery dispatch. It uses gossip-style scheduling and explicit validation to reduce unsafe herding behaviour in simulation, while transparently reporting residual voltage limitations.
+GridAI is a hackathon prototype showing fail-closed coordination for home battery dispatch. It uses priority-based scheduling and explicit physical validation to reduce unsafe herding behaviour in simulation, while transparently reporting residual voltage limitations.

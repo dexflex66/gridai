@@ -25,7 +25,7 @@
 ## Limitations
 
 GridAI is a hackathon prototype showing fail-closed coordination for home battery dispatch.
-It uses gossip-style scheduling and explicit validation to reduce unsafe herding behaviour
+It uses priority-based scheduling and explicit physical validation to reduce unsafe herding behaviour
 in simulation, while transparently reporting residual voltage limitations.
 
 - **Residual undervoltage:** The headline gossip-heterogeneous AEMO scenario reports
@@ -33,6 +33,6 @@ in simulation, while transparently reporting residual voltage limitations.
   primary tuning target. A prototyped voltage-aware extension (branch
   `voltage-aware-edge-coverage`) reduces this by ~90%% in experiments.
 - Not production-ready.
-- Not decentralised — the Coordinator allocates dispatch slots using global fleet state. A fully decentralised peer-to-peer implementation is the next step.
+- Not fully decentralised — the Coordinator allocates dispatch slots using global fleet state (priority-based/hybrid coordination). A fully decentralised peer-to-peer implementation is future work.
 - Not real-feeder validated.
 - Not grid-agnostic.
