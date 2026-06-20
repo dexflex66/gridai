@@ -160,14 +160,14 @@ def build_data_bundle():
             "peak_demand_kw": naive_scenario["metrics"]["peak_demand_kw"],
         },
         "gossip_hom": {
-            "label": "Gossip · homogeneous fleet (control)",
+            "label": "GridAI · homogeneous fleet (control)",
             "synchrony": gossip_hom_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": gossip_hom_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": gossip_hom_scenario["metrics"]["bat_overvolt_steps"],
             "peak_demand_kw": gossip_hom_scenario["metrics"]["peak_demand_kw"],
         },
         "gossip_het": {
-            "label": "Gossip · heterogeneous fleet (realistic)",
+            "label": "GridAI · heterogeneous fleet (realistic)",
             "synchrony": gossip_scenario["metrics"]["synchrony_ratio"],
             "max_sim_discharge": gossip_scenario["metrics"]["max_simultaneous_discharge"],
             "bat_overvolt_steps": gossip_scenario["metrics"]["bat_overvolt_steps"],
@@ -364,7 +364,7 @@ canvas { display: block; }
       <div class="toggle-group" id="viewToggle">
         <button onclick="setView('side')" class="active" id="btnSide">Side-by-side</button>
         <button onclick="setView('naive')" id="btnNaive">Naive only</button>
-        <button onclick="setView('gossip')" id="btnGossip">Gossip only</button>
+        <button onclick="setView('gossip')" id="btnGossip">GridAI only</button>
       </div>
     </div>
   </div>
@@ -384,17 +384,17 @@ canvas { display: block; }
       <div class="change">NAIVE herding overvolt events</div>
     </div>
     <div class="metric-card">
-      <div class="label">Gossip Overvolt Violations</div>
+      <div class="label">GridAI Overvolt Violations</div>
       <div class="value green">0</div>
-      <div class="change green">↓ eliminated by desynchronisation</div>
+      <div class="change green">↓ eliminated by coordination</div>
     </div>
     <div class="metric-card">
       <div class="label">Synchrony (peak simultaneous / 60)</div>
       <div class="value red">1.000</div>
-      <div class="change">NAIVE → <span class="green">0.167</span> GOSSIP</div>
+      <div class="change">NAIVE → <span class="green">0.167</span> GridAI</div>
     </div>
     <div class="metric-card">
-      <div class="label">Gossip Convergence</div>
+      <div class="label">Coordination Rounds</div>
       <div class="value green">1 round</div>
       <div class="change green">lightweight coordination</div>
     </div>
@@ -438,7 +438,7 @@ canvas { display: block; }
     <!-- Gossip panel -->
     <div class="panel" id="gossipPanel">
       <div class="panel-title">
-        Gossip (desynchronised)
+        GridAI (priority-based)
         <span class="badge badge-approved">APPROVED</span>
       </div>
       <canvas id="gossipGrid" width="640" height="240"></canvas>
@@ -472,7 +472,7 @@ canvas { display: block; }
     </div>
     <!-- Gossip compliance -->
     <div class="audit-panel">
-      <div class="panel-title">BAND Audit Trail — Gossip</div>
+      <div class="panel-title">BAND Audit Trail — GridAI</div>
       <div class="audit-log" id="gossipAuditLog"></div>
       <div class="compliance-summary" id="gossipComplianceSummary">
         <div class="decision green">&#10003; APPROVED</div>
@@ -485,7 +485,7 @@ canvas { display: block; }
   <!-- 3-way heterogeneity panel -->
   <div class="threeway-panel">
     <div class="panel-title">3-Way Heterogeneity Contrast (secondary panel)</div>
-    <div style="font-size:0.75rem;color:#64748b;margin-bottom:8px;">Battery-herding overvolt violations vs fleet synchrony. Gossip eliminates overvolt regardless of homogeneous/heterogeneous setup.</div>
+    <div style="font-size:0.75rem;color:#64748b;margin-bottom:8px;">Battery-herding overvolt violations vs fleet synchrony. GridAI eliminates overvolt regardless of homogeneous/heterogeneous setup.</div>
     <div class="threeway-grid" id="threewayGrid"></div>
   </div>
 
@@ -547,7 +547,7 @@ function getPhase(s) {
   if (s < 72) return ['Morning', 'Grid healthy, batteries idle'];
   if (s < 144) return ['Midday', 'PV generation (separate phenomenon)'];
   if (s < 204) return ['Afternoon', 'Demand rising, batteries pre-charge'];
-  if (s < 240) return ['Evening Peak', 'Battery window · Naive: synchronized flash · Gossip: ripple'];
+  if (s < 240) return ['Evening Peak', 'Battery window · Naive: synchronized flash · GridAI: staggered'];
   if (s < 270) return ['Late Evening', 'Batteries depleting'];
   return ['Night', 'Low demand, recovery'];
 }
@@ -895,7 +895,7 @@ function drawDemandCurve(canvas, step) {
   ctx.fillStyle = '#94a3b8'; ctx.font = '10px sans-serif'; ctx.textAlign = 'left';
   ctx.fillText('Naive', padX + 22, padTop + 8);
   ctx.fillStyle = '#22c55e'; ctx.fillRect(padX + 70, padTop, 18, 3);
-  ctx.fillText('Gossip', padX + 92, padTop + 8);
+  ctx.fillText('GridAI', padX + 92, padTop + 8);
 
   // Current time marker
   const tx = toX(step);
@@ -972,7 +972,7 @@ function updateBreachIndicator(step) {
   if (view === 'gossip') {
     ind.style.display = 'inline';
     ind.style.color = '#22c55e';
-    ind.textContent = '\u2705 GOSSIP DISPATCH — 0 herding overvoltage events';
+    ind.textContent = '\u2705 GridAI — 0 herding overvoltage events';
     return;
   }
   ind.style.color = '#ef4444';
@@ -980,7 +980,7 @@ function updateBreachIndicator(step) {
     const naiveBreaches = DATA.naive.herding_breaches.filter(e => e.step === step);
     if (naiveBreaches.length > 0) {
       ind.style.display = 'inline';
-      ind.textContent = '\u26a1 NAIVE: VOLTAGE BREACH \u00b7 GOSSIP: CLEAN';
+      ind.textContent = '\u26a1 NAIVE: BREACH \u00b7 GridAI: OVERVOLTAGE CLEAN';
     } else {
       ind.style.display = 'none';
     }

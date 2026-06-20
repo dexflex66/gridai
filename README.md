@@ -20,7 +20,7 @@ A priority-based coordination protocol where the Coordinator allocates each batt
 
 ![GridAI Architecture](viz/screenshots/gridai_architecture.png)
 
-*GridAI separates agent coordination from physical acceptance: agents propose dispatch schedules, but voltage/SOC/kW validation decides whether a schedule is accepted, repaired, or reported as residual risk.*
+**Agents propose. Physics decides.** *GridAI separates agent coordination from physical acceptance: agents propose dispatch schedules, but voltage/SOC/kW validation decides whether a schedule is accepted, repaired, or reported as residual risk.*
 
 ```mermaid
 flowchart TB

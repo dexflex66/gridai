@@ -215,8 +215,8 @@ add_text_box(s, 0.6, 1.65, 8.8, 0.35,
 
 cards = [
     ("NAIVE", "1.000", "60/60 homes\nsimultaneous", RED),
-    ("GOSSIP\nHOMOGENEOUS", "0.367", "22/60 homes\nidentical fleet", AMBER),
-    ("GOSSIP\nHETEROGENEOUS", "0.167", "10/60 homes\nrealistic fleet", GREEN),
+    ("GRIDAI\nHOMOGENEOUS", "0.367", "22/60 homes\nidentical fleet", AMBER),
+    ("GRIDAI\nHETEROGENEOUS", "0.167", "10/60 homes\nrealistic fleet", GREEN),
 ]
 cw, ch = 2.7, 1.8
 cy = 2.4
@@ -244,8 +244,8 @@ add_text_box(s, 0.6, 1.2, 5.2, 0.55,
     Pt(16), WHITE, True)
 
 bullets = [
-    ("The Coordinator allocates dispatch slots from global fleet state.", Pt(13), WHITE),
-    ("Converges in 1 round.", Pt(13), WHITE),
+    ("The Coordinator allocates each battery's dispatch slot from global fleet state, using SOC and owner preference.", Pt(13), WHITE),
+    ("Centralised priority allocation, decentralised-ready. Converges in 1 to 2 rounds.", Pt(13), WHITE),
 ]
 ty = 2.0
 for bl, sz, clr in bullets:
@@ -261,7 +261,7 @@ add_text_box(s, 0.6, ty, 5.0, 0.55, "471 \u2192 0", Pt(36), AMBER, True)
 ty += 0.6
 
 add_text_box(s, 0.6, ty, 5.0, 0.35,
-    "Honest tradeoff: residual far-feeder undervoltage, 435 events (distinct from herding, surfaced not hidden)",
+    "Honest tradeoff: 435 far-feeder undervoltage events (distinct from herding, disclosed not hidden, next tuning target)",
     Pt(10), STEEL, italic=True)
 
 img = os.path.join(ASSETS, "03_naive_peak_HERO.png")
@@ -280,7 +280,7 @@ add_text_box(s, 0.6, 1.15, 8.8, 0.4,
 
 agents = [
     ("FORECASTER", "Identifies risk windows,\nhands off to Coordinator", RGBColor(0x4A, 0x90, 0xD9)),
-    ("COORDINATOR", "Runs gossip protocol, hands\ndispatch plan to Compliance", RGBColor(0x50, 0xB8, 0x7D)),
+    ("COORDINATOR", "Runs priority-based dispatch, hands\ndispatch plan to Compliance", RGBColor(0x50, 0xB8, 0x7D)),
     ("COMPLIANCE", "Checks AS IEC 60038:2022,\nattributes breach cause, escalates", AMBER),
     ("OPERATOR", "Human-in-the-loop, receives\nescalation, records decision", RGBColor(0xE7, 0x4C, 0x3C)),
 ]
@@ -452,7 +452,7 @@ add_card(s, 0.6, 3.75, 8.8, 1.15)
 techs = (
     "89 tests  \u00b7  82 original + 7 causal-link & regression additions\n\n"
     "Built with:  Python  \u00b7  Band SDK  \u00b7  AEMO open data  \u00b7  AS IEC 60038:2022\n"
-    "Heterogeneous gossip 0.167  \u2192  Homogeneous gossip 0.367  \u2192  Naive 1.000 synchrony baseline"
+    "GridAI heterogeneous 0.167  \u2192  GridAI homogeneous 0.367  \u2192  Naive 1.000 synchrony baseline"
 )
 add_text_box(s, 0.9, 3.9, 8.2, 0.85, techs, Pt(11), STEEL)
 

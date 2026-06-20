@@ -221,8 +221,8 @@ function metricBar(slide, x, y, w, label, value, color) {
   const cardW = 2.7, cardH = 1.6, cardY = 2.5, gap = 0.25;
   const cards = [
     { label: "NAIVE", value: "1.000", sub: "60/60 homes\nsimultaneous", color: RED },
-    { label: "GOSSIP\nHOMOGENEOUS", value: "0.367", sub: "22/60 homes\nidentical fleet", color: AMBER },
-    { label: "GOSSIP\nHETEROGENEOUS", value: "0.167", sub: "10/60 homes\nrealistic fleet", color: GREEN },
+    { label: "GRIDAI\nHOMOGENEOUS", value: "0.367", sub: "22/60 homes\nidentical fleet", color: AMBER },
+    { label: "GRIDAI\nHETEROGENEOUS", value: "0.167", sub: "10/60 homes\nrealistic fleet", color: GREEN },
   ];
 
   cards.forEach((card, i) => {
@@ -262,12 +262,12 @@ function metricBar(slide, x, y, w, label, value, color) {
   });
 
   s.addText([
-    { text: "The Coordinator allocates dispatch slots from global fleet state.", options: { bullet: true, breakLine: true } },
-    { text: "Converges in 1 round.", options: { bullet: true, breakLine: true } },
+    { text: "The Coordinator allocates each battery's dispatch slot from global fleet state, using SOC and owner preference.", options: { bullet: true, breakLine: true } },
+    { text: "Centralised priority allocation, decentralised-ready. Converges in 1 to 2 rounds.", options: { bullet: true, breakLine: true } },
     { text: "", options: { breakLine: true, fontSize: 6 } },
     { text: "Battery-herding overvoltage:  ", options: { breakLine: false, color: WHITE } },
     { text: "471 → 0", options: { breakLine: true, color: AMBER, bold: true, fontSize: 16 } },
-    { text: "Honest tradeoff: residual far-feeder undervoltage, 435 events (distinct from herding)", options: { color: STEEL, italic: true } },
+    { text: "Honest tradeoff: 435 far-feeder undervoltage events (distinct from herding, disclosed not hidden, next tuning target)", options: { color: STEEL, italic: true } },
   ], { x: 0.6, y: 1.9, w: 5.0, h: 2.2, fontSize: 12, fontFace: FONT, color: WHITE, margin: 0 });
 
   // Right side: HERO screenshot
@@ -293,7 +293,7 @@ function metricBar(slide, x, y, w, label, value, color) {
 
   const agents = [
     { id: "FORECASTER", role: "Identifies risk windows, hands off to Coordinator", color: "4A90D9" },
-    { id: "COORDINATOR", role: "Runs gossip protocol, hands dispatch plan to Compliance", color: "50B87D" },
+    { id: "COORDINATOR", role: "Runs priority-based dispatch, hands dispatch plan to Compliance", color: "50B87D" },
     { id: "COMPLIANCE", role: "Checks AS IEC 60038:2022, attributes breach cause, escalates", color: "F4A623" },
     { id: "OPERATOR", role: "Human-in-the-loop, receives escalation, records decision", color: "E74C3C" },
   ];
@@ -595,7 +595,7 @@ function metricBar(slide, x, y, w, label, value, color) {
     { text: "", options: { breakLine: true, fontSize: 6 } },
     { text: "Built with:  ", options: { breakLine: false, color: STEEL } },
     { text: "Python  ·  Band SDK  ·  AEMO open data  ·  AS IEC 60038:2022", options: { color: WHITE, breakLine: true } },
-    { text: "Homogeneous gossip 0.367  →  Heterogeneous gossip 0.167  →  Naive 1.000 synchrony baseline", options: { color: STEEL, breakLine: true, italic: true, fontSize: 10 } },
+    { text: "GridAI heterogeneous 0.167  →  GridAI homogeneous 0.367  →  Naive 1.000 synchrony baseline", options: { color: STEEL, breakLine: true, italic: true, fontSize: 10 } },
   ], { x: 0.9, y: metaBoxY + 0.15, w: 8.2, h: 0.9, fontSize: 11, fontFace: FONT, margin: 0 });
 
   s.addText([

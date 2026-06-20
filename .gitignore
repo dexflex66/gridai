@@ -15,6 +15,10 @@ build/
 video/
 audio/
 *.webm
+final/verify_frames/
+final/padded_visual.mp4
+final/gridai_demo_v3_visual.mp4
+submission/*/narration/*.mp3
 
 # Secrets — never commit
 .env

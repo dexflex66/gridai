@@ -24,7 +24,7 @@
       "agent_id": "coordinator",
       "capabilities": [
         "execution",
-        "gossip_coordination",
+        "priority_coordination",
         "dispatch_planning"
       ]
     }
